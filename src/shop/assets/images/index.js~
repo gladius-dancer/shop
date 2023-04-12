@@ -1,0 +1,23 @@
+export default {
+  bannerBg: require("./banner-bg.png").default,
+  callIcon: require("./call-icon.png").default,
+  computer: require("./computer-img.png").default,
+  dress: require("./dress-shirt-img.png").default,
+  flagFrance: require("./flag-france.png").default,
+  flagUk: require("./flag-uk.png").default,
+  footerLogo: require("./footer-logo.png").default,
+  jhumka: require("./jhumka-img.png").default,
+  kangan: require("./kangan-img.png").default,
+  laptop: require("./laptop-img.png").default,
+  logo: require("./logo.png").default,
+  mail: require("./mail-icon.png").default,
+  map: require("./map-icon.png").default,
+  mobile: require("./mobile-img.png").default,
+  neklesh: require("./neklesh-img.png").default,
+  search: require("./search-icon.png").default,
+  toggle: require("./toggle-icon.png").default,
+  tshirt: require("./tshirt-img.png").default,
+  user: require("./user-icon.png").default,
+  womenClothes: require("./women-clothes-img.png").default,
+
+}

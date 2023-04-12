@@ -1,0 +1,120 @@
+.userAvatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-size: auto 35px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.userName {
+  text-transform: capitalize;
+  margin: 0;
+  color: #fff;
+  cursor: pointer;
+}
+
+.logout{
+  width: 100%;
+  height: 35px;
+  border: 1px #000 solid;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  transition: 0.5s;
+  cursor: pointer;
+  line-height: 2;
+}
+
+.help-line:hover{
+  .logout{
+    top: 42px;
+  }
+}
+
+.top_logo{
+  img{
+    width: 70px;
+    height: auto;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .top_logo{
+    img{
+      width: 90px;
+      height: auto;
+    }
+  }
+}
+
+.main-menu-area{
+  width: 100%;
+}
+
+.top-area{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.bag,
+.favorite{
+  display: none;
+}
+
+@media only screen and (min-width: 500px) {
+  .bag,
+  .favorite{
+    display: block;
+    float: right;
+    margin-top: 5px;
+  }
+}
+
+.card-menu{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  top: 35px;
+  right: 0;
+  gap: 20px;
+}
+
+@media only screen and (min-width: 768px) {
+  .main_header_area {
+    margin-bottom: 30px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .top-area{
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .top-area{
+    padding: 0;
+  }
+
+  .card-menu{
+    top: 45px;
+  }
+
+  .main_header_area{
+    position: absolute;
+    z-index: 3;
+    top: 56px;
+    left: 20%;
+
+  }
+}
+
+.navbar-toggler{
+  width: 100%;
+}
+
+
