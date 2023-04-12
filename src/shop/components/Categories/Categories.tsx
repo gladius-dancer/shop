@@ -3,7 +3,7 @@ import cn from "classnames";
 import "./Categories.scss";
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks/useRedux";
-import {change} from "../../store/reducers/NavSlice";
+import {change} from "../../../store/reducers/NavSlice";
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

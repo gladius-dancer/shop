@@ -23,38 +23,21 @@
     //    "include": ["src", "typings.d.ts"]
 
     "allowJs": true,
-    /* Allow javascript files to be compiled. */
     "importHelpers": true,
-    /* Import emit helpers from 'tslib'. */
     "strict": true,
-    /* Enable all strict type-checking options. */
     "allowSyntheticDefaultImports": true,
-    /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
     "esModuleInterop": true,
-    /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     "forceConsistentCasingInFileNames": true
-    /* Disallow inconsistently-cased references to the same file. */
   },
   "include": [
-    "src"
+    "./src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
   ],
-  "compilerOptions": {
-  },
-  "include": [
-    "./src/javascript/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+
   "types": [
     "chrome",
     "node"
   ]
 }
-
-
-
-

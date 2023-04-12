@@ -1,7 +1,7 @@
 import {AppDispatch} from "../store";
 import axios from "axios";
-import {authSlice} from "./AuthSlice";
-import {categoriesSlice} from "./CategorySlice";
+import {authSlice} from "./AuthSlice.ts";
+import {categoriesSlice} from "./CategorySlice.ts";
 import {productsSlice} from "./ProductsSlice";
 import {LoginType} from "../../types/LoginType";
 
@@ -20,6 +20,7 @@ export const login = (data: LoginType)=> async (dispatch: AppDispatch) => {
                 }
             })
             localStorage.setItem("token", JSON.stringify(response.data));
+            localStorage.setItem("authStatus", JSON.stringify("true"));
             dispatch(authSlice.actions.loginSuccess(true))
     } catch (e: any) {
         dispatch(authSlice.actions.loginError(e.message))
@@ -39,6 +40,16 @@ export const getCategories = ()=> async (dispatch: AppDispatch)=>{
 export const getProducts = ()=> async (dispatch: AppDispatch)=>{
     try{
         const response = await axios.get("https://ecommerce.icedev.uz/products/");
+        dispatch(productsSlice.actions.getProducts(response.data))
+    }
+    catch(e){
+
+    }
+}
+
+export const getLimitedProducts = ()=> async (dispatch: AppDispatch)=>{
+    try{
+        const response = await axios.get("https://ecommerce.icedev.uz/products?limit=5");
         dispatch(productsSlice.actions.getProducts(response.data))
     }
     catch(e){
