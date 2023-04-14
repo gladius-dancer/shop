@@ -30,7 +30,7 @@ function QuickView(props: CurrentProductType) {
                 <div className="row">
                   <div className="col-12 col-lg-5 d-flex align-items-center">
                     <div className="quickview_pro_img">
-                      <img src={props.image[0]} alt="" />
+                      <img src={props.image} alt="" />
                     </div>
                   </div>
                   <div className="col-12 col-lg-7">

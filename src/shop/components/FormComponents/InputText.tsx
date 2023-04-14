@@ -3,7 +3,7 @@ import {Controller} from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import {FormProps} from "./FormProps";
 
-export const InputText = ({ name, control, status }: FormProps) => {
+export const InputText = ({ name, control, status, size, fullWith }: FormProps) => {
     return (
         <Controller
             name={name}
@@ -18,9 +18,10 @@ export const InputText = ({ name, control, status }: FormProps) => {
                     error={!!error}
                     onChange={onChange}
                     value={value}
-                    fullWidth
+                    fullWidth={fullWith}
                     variant="outlined"
                     disabled={status ? false : true}
+                    size={size}
                 />
             )}
         />

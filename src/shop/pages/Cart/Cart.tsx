@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { update } from "../../../store/reducers/CartSlice";
 import { setPrice } from "../../../store/reducers/PriceSlice";
+import { setShipping } from "../../../store/reducers/ShippingSlice";
 import { CartType } from "../../../types/CartType";
 
 function Cart() {
   const dispatch = useAppDispatch();
   const nav = useAppSelector((state) => state.navReducer);
   const cart = useAppSelector((state) => state.cartReduser.cart);
+  const shippings = useAppSelector((state) => state.shippingReduser.shipping);
   const price: any = useAppSelector(
     (state) => state.priceReduser.price.totalPrice
   );
@@ -67,12 +69,17 @@ function Cart() {
       return summ + current.price * current.count;
     }, 0);
 
-    dispatch(setPrice({ totalPrice: totalPrice, shipping: 0 }));
+    dispatch(
+      setPrice({
+        totalPrice: totalPrice,
+        shipping: shippings[shippings.current],
+      })
+    );
     return totalPrice;
   };
 
   const changeShipping = (value: string) => {
-    dispatch(setPrice({ ...price, shipping: value }));
+    dispatch(setShipping(value));
     return value;
   };
 
@@ -86,7 +93,6 @@ function Cart() {
     localStorage.setItem("shipping", JSON.stringify(shipping));
   }, [cart, shipping]);
 
-  // @ts-ignore
   return (
     <>
       <Categories />
@@ -113,7 +119,10 @@ function Cart() {
                           <tr key={item.id}>
                             <td className="cart_product_img d-flex align-items-center">
                               <a href="#">
-                                <img src={item.images[0].image_path} alt="ProductType" />
+                                <img
+                                  src={item.images[0].image_path}
+                                  alt="ProductType"
+                                />
                               </a>
                               <h6>{item.name}</h6>
                             </td>
@@ -213,7 +222,7 @@ function Cart() {
                     <div className="custom-control custom-radio mb-30">
                       <input
                         type="radio"
-                        checked={shipping.current === "extra"}
+                        checked={shippings.current === "extra"}
                         onClick={() => changeShipping("extra")}
                         id="customRadio1"
                         name="customRadio"
@@ -224,14 +233,14 @@ function Cart() {
                         htmlFor="customRadio1"
                       >
                         <span>Next day delivery</span>
-                        <span>$ {shipping.extra}</span>
+                        <span>$ {shippings.extra}</span>
                       </label>
                     </div>
 
                     <div className="custom-control custom-radio mb-30">
                       <input
                         type="radio"
-                        checked={shipping.current === "standart"}
+                        checked={shippings.current === "standart"}
                         onClick={() => changeShipping("standart")}
                         id="customRadio2"
                         name="customRadio"
@@ -242,14 +251,14 @@ function Cart() {
                         htmlFor="customRadio2"
                       >
                         <span>Standard delivery</span>
-                        <span>$ {shipping.standart}</span>
+                        <span>$ {shippings.standart}</span>
                       </label>
                     </div>
 
                     <div className="custom-control custom-radio">
                       <input
                         type="radio"
-                        checked={shipping.current === "personal"}
+                        checked={shippings.current === "personal"}
                         onClick={() => changeShipping("personal")}
                         id="customRadio3"
                         name="customRadio"
@@ -275,13 +284,13 @@ function Cart() {
                     <ul className="cart-total-chart">
                       <li>
                         <span>Subtotal</span>
-                        <span>$ {parseFloat(price.totalPrice).toFixed(2)}</span>
+                        <span>$ {parseFloat(price).toFixed(2)}</span>
                       </li>
                       <li>
                         <span>Shipping</span>
                         <span>
-                          {shipping[shipping.current] > 0
-                            ? shipping[shipping.current]
+                          {shippings[shippings.current] > 0
+                            ? shippings[shippings.current]
                             : "Free"}
                         </span>
                       </li>
@@ -291,10 +300,7 @@ function Cart() {
                         </span>
                         <span>
                           <strong>
-                            ${" "}
-                            {parseFloat(
-                              price.totalPrice + shipping[shipping.current]
-                            ).toFixed(2)}
+                            $ {parseFloat(price + shippings[shippings.current]).toFixed(2)}
                           </strong>
                         </span>
                       </li>

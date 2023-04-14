@@ -9,4 +9,6 @@ export interface FormProps {
   error?: any,
   onChange?: any,
   options?: any
+  size?: string,
+  fullWith?: boolean
 }

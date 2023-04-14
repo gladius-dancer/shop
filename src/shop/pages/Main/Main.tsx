@@ -14,6 +14,8 @@ import { setPrice } from "../../../store/reducers/PriceSlice";
 import { CartType } from "../../../types/CartType";
 import ModalComponent from "../../components/Modal/ModalComponent";
 import QuickView from "../../components/QuickView/QuickView";
+import { ToastContainer } from "react-toastify";
+import { Notification } from "../../../utils/notification";
 
 function Main() {
   const dispatch = useAppDispatch();
@@ -23,13 +25,13 @@ function Main() {
   const navigate = useNavigate();
   const isAuth = useIsAuthorized();
   const [currentProduct, setSetCurrentProduct] = useState<any>({});
+    console.log(currentProduct)
   const cart = useAppSelector((state) => state.cartReduser.cart);
+  let notify = new Notification();
 
   const addToCart = (id: number) => {
     if (isAuth) {
-      console.log(id);
-
-      // notifyAddProduct();
+      notify.showSuccess("Product added");
       const product = products.filter((item: CartType) => item.id === id)[0];
       const founded = cart.find((item: any) => item.id === id);
       Boolean(founded)
@@ -78,6 +80,7 @@ function Main() {
 
   return (
     <div>
+      <ToastContainer />
       <Categories />
       <div id="wrapper" className={nav ? "karl-side-menu-open" : ""}>
         <Header />
@@ -96,25 +99,25 @@ function Main() {
           products={products}
           showDetails={showDetails}
           addToCart={addToCart}
-          currentPage={5}
+          currentPage={1}
           handleChange={""}
         />
         <Footer />
       </div>
       <ModalComponent
-          isOpen={modal}
-          className="modal"
-          overlayClassName="modal-overlay"
+        isOpen={modal}
+        className="modal"
+        overlayClassName="modal-overlay"
       >
         <QuickView
-            id={currentProduct.id}
-            image={currentProduct.images}
-            title={currentProduct.name}
-            price={currentProduct.price}
-            description={currentProduct.description}
-            setModal={setModal}
-            addToCart={addToCart}
-            link="/details"
+          id={currentProduct.id}
+          image={currentProduct.images ? currentProduct.images[0].image_path:""}
+          title={currentProduct.name}
+          price={currentProduct.price}
+          description={currentProduct.description}
+          setModal={setModal}
+          addToCart={addToCart}
+          link="/details"
         />
       </ModalComponent>
     </div>

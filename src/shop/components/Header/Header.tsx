@@ -6,30 +6,19 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/scss/main.scss";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { change } from "../../../store/reducers/NavSlice";
-import {useIsAuthorized} from "../../hooks/useIsAuthorized";
+import { useIsAuthorized } from "../../hooks/useIsAuthorized";
+import { Notification } from "../../../utils/notification";
 
 export default function Header() {
   const dispatch = useAppDispatch();
-
+  const notify = new Notification();
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("authStatus");
-    toast.info("User succesfully logout!", {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    notify.showInfo("User succesfully logout!");
   };
-
-  const cart = useAppSelector(state => state.cartReduser.cart);
-  console.log(cart)
-
-  const isAutorized = useIsAuthorized()
+  const cart = useAppSelector((state) => state.cartReduser.cart);
+  const isAutorized = useIsAuthorized();
 
   return (
     <header className="header_area">
@@ -55,31 +44,35 @@ export default function Header() {
                   </div>
                   <div className="cart">
                     <Link to={"/cart"} id="header-cart-btn">
-                      {cart.length> 0 ? <span className="cart_quantity">{cart.length}</span>:<></>}
-
+                      {cart.length > 0 ? (
+                        <span className="cart_quantity">{cart.length}</span>
+                      ) : (
+                        <></>
+                      )}
                       <i className="ti-bag"></i>{" "}
                       <label className="bag">Your Bag</label>
                     </Link>
                   </div>
 
                   <div className="help-line">
-                    {
-                      isAutorized ?
-                          <>
-                            <Link to={"/profile"}>
-                              <div className="userAvatar" style={{ backgroundImage: `url()` }} />
-                              <p className="userName">
-                                User
-                              </p>
-                            </Link>
-                            <div className="logout" onClick={()=>logout()}>
-                              Logout
-                            </div>
-                          </> :
-                          <Link to={"/login"}>
-                            <i className="ti-user"></i> Login
-                          </Link>
-                    }
+                    {isAutorized ? (
+                      <>
+                        <Link to={"/profile"}>
+                          <div
+                            className="userAvatar"
+                            style={{ backgroundImage: `url()` }}
+                          />
+                          <p className="userName">User</p>
+                        </Link>
+                        <div className="logout" onClick={() => logout()}>
+                          Logout
+                        </div>
+                      </>
+                    ) : (
+                      <Link to={"/login"}>
+                        <i className="ti-user"></i> Login
+                      </Link>
+                    )}
                   </div>
 
                   <div

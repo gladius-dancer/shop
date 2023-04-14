@@ -2,6 +2,7 @@ import React from "react";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import { ProductType } from "../../../types/ProductType";
+import "./ProductList.scss";
 
 type Props = {
   products: ProductType[];
@@ -43,7 +44,10 @@ function ProductList({
               {/* ProductType Description */}
               <div className="product-description">
                 <h4 className="product-price">${item.price}</h4>
-                <p>{item.name}</p>
+                <div className="d-flex">
+                  <p >{item.name}</p>
+                  <div className="like"><i className="ti-heart"></i></div>
+                </div>
                 {/* Add to Cart */}
                 <p
                   onClick={() => addToCart(item.id)}

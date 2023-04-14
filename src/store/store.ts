@@ -6,8 +6,8 @@ import productsReduser from "./reducers/ProductsSlice";
 import cartReduser from "./reducers/CartSlice";
 import priceReduser from "./reducers/PriceSlice";
 import favoriteReduser from "./reducers/FavoriteSlice";
+import shippingReduser from "./reducers/ShippingSlice";
 
-console.log(authReducer);
 
 const rootReducer = combineReducers({
   authReducer,
@@ -16,7 +16,9 @@ const rootReducer = combineReducers({
   productsReduser,
   cartReduser,
   priceReduser,
-  favoriteReduser
+  favoriteReduser,
+  shippingReduser
+
 });
 
 export const setupStore = () => {

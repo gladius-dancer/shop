@@ -4,6 +4,8 @@ import {authSlice} from "./AuthSlice.ts";
 import {categoriesSlice} from "./CategorySlice.ts";
 import {productsSlice} from "./ProductsSlice";
 import {LoginType} from "../../types/LoginType";
+import {FeedbackType} from "../../types/FeedbackType";
+
 
 export const login = (data: LoginType)=> async (dispatch: AppDispatch) => {
     try {
@@ -24,6 +26,21 @@ export const login = (data: LoginType)=> async (dispatch: AppDispatch) => {
             dispatch(authSlice.actions.loginSuccess(true))
     } catch (e: any) {
         dispatch(authSlice.actions.loginError(e.message))
+    }
+}
+
+export const sendFeedback = (data: FeedbackType)=> async (dispatch: AppDispatch) => {
+    try {
+        const response = await axios.post(
+            "https://ecommerce.icedev.uz/call_orders",
+            {
+                "full_name": data.name,
+                "phone_number": data.number,
+                "start_time": data.start,
+                "end_time": data.end,
+                "comment": data.message
+            })
+    } catch (e: any) {
     }
 }
 

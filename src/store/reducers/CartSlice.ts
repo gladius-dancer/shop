@@ -6,7 +6,7 @@ type CartState = {
 };
 
 const initialState: CartState = {
-  cart: JSON.parse(localStorage.getItem("cart") || "") || [],
+  cart: JSON.parse(localStorage.getItem("cart") ?? "[]")
 };
 
 export const cartSlice = createSlice({
@@ -15,11 +15,9 @@ export const cartSlice = createSlice({
   reducers: {
     add(state, action: PayloadAction<CartType>) {
       state.cart.push(action.payload);
-      localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     update(state, action: PayloadAction<CartType[]>) {
       state.cart = action.payload;
-      localStorage.setItem("cart", JSON.stringify(state.cart));
     },
   },
 });

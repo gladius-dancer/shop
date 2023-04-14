@@ -6,7 +6,7 @@ import Main from "./shop/pages/Main/Main";
 import Login from "./shop/pages/Login/Login";
 import { useEffect } from "react";
 import { useAppDispatch } from "./shop/hooks/useRedux";
-import { getCategories, getProducts } from "./store/reducers/ActionCreators";
+import { getCategories, getProducts } from "./store/reducers/AsyncActions";
 import Panel from "./admin-panel/pages/Panel";
 import Dashboard from "./admin-panel/components/Dashboard/Dashboard";
 import Orders from "./admin-panel/components/Orders/Orders";
@@ -29,6 +29,7 @@ const App = () => {
     JSON.parse(localStorage.getItem("authStatus")) === "true"
       ? dispatch(authSlice.actions.loginSuccess(true))
       : dispatch(authSlice.actions.loginSuccess(false));
+
   }, []);
 
   return (
