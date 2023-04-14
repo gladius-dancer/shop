@@ -30,6 +30,7 @@ export const login = (data: LoginType)=> async (dispatch: AppDispatch) => {
 }
 
 export const sendFeedback = (data: FeedbackType)=> async (dispatch: AppDispatch) => {
+    console.log(typeof(data.start))
     try {
         const response = await axios.post(
             "https://ecommerce.icedev.uz/call_orders",

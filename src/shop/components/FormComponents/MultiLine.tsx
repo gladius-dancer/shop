@@ -1,28 +1,30 @@
 import React from "react";
-import {Controller} from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import {FormProps} from "./FormProps";
 
-export const InputText = ({ name,label, control, status, size, fullWith }: FormProps) => {
+export const MultiLine = ({ name, control, label }) => {
     return (
         <Controller
             name={name}
             control={control}
-            defaultValue={""}
+            defaultValue={''}
+
             render={({
                          field: { onChange, value },
-                         fieldState: { error }
+                         fieldState: { error },
+                         formState,
                      }) => (
                 <TextField
                     helperText={error ? error.message : null}
-                    label={label}
+                    size="small"
                     error={!!error}
                     onChange={onChange}
                     value={value}
-                    fullWidth={fullWith}
+                    fullWidth
+                    label={label}
                     variant="outlined"
-                    disabled={status ? false : true}
-                    // size={size}
+                    multiline
+                    rows={3}
                 />
             )}
         />

@@ -14,10 +14,9 @@ export function useFeedbackForm() {
     const schema = yup.object().shape({
         name: yup.string().required(),
         number: yup.string().required(),
-        start: yup.string().required(),
-        end: yup.string().required(),
+        start: yup.date().required(),
+        end: yup.date().required(),
         message: yup.string().required(),
-
     });
 
     const {
@@ -28,6 +27,7 @@ export function useFeedbackForm() {
 
     const onSubmit = useCallback((formData: FormData) => {
         dispatch(sendFeedback(formData));
+        console.log(formData)
     }, []);
 
     return {

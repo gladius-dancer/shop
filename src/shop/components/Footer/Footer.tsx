@@ -2,11 +2,20 @@ import * as React from "react";
 import images from "../../assets";
 import "./Footer.scss";
 import { InputText } from "../FormComponents/InputText";
-import {useFeedbackForm} from "./hooks/useSendFeedback";
+import { MultiLine } from "../FormComponents/MultiLine";
+import dayjs from "dayjs";
+import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useFeedbackForm } from "./hook/useFeedback";
+import { TimePicker } from "../FormComponents/TimePicker";
 
 function Footer() {
-
-  const {methods: {control}, onSubmit, errors} = useFeedbackForm()
+  const {
+    methods: { control },
+    onSubmit,
+    errors,
+  } = useFeedbackForm();
 
   return (
     <footer className="footer_area">
@@ -20,7 +29,6 @@ function Footer() {
               </div>
               <div className="copywrite_text d-flex align-items-center">
                 <p>
-                  {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
                   Copyright &copy;
                   <script>document.write(new Date().getFullYear());</script>
                   All rights reserved | Made with{" "}
@@ -32,12 +40,10 @@ function Footer() {
                   <a href="https://themewagon.com" target="_blank">
                     ThemeWagon
                   </a>
-                  {/* Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. */}
                 </p>
               </div>
             </div>
           </div>
-          {/* Single Footer Area Start */}
           <div className="col-12 col-sm-6 col-md-3 col-lg-2">
             <div className="single_footer_area">
               <ul className="footer_widget_menu">
@@ -59,7 +65,6 @@ function Footer() {
               </ul>
             </div>
           </div>
-          {/* Single Footer Area Start */}
           <div className="col-12 col-sm-6 col-md-3 col-lg-2">
             <div className="single_footer_area">
               <ul className="footer_widget_menu">
@@ -78,34 +83,48 @@ function Footer() {
               </ul>
             </div>
           </div>
-          {/* Single Footer Area Start */}
           <div className="col-12 col-lg-5">
             <div className="single_footer_area">
               <div className="footer_heading mb-30">
                 <h6>Feedback</h6>
               </div>
               <div className="subscribtion_form">
-                <form onSubmit={onSubmit}>
-                  <InputText
-                    key="name"
-                    name="name"
-                    control={control}
-                    status={true}
-                    label="Name"
-                    size="small"
-                    fullWith={false}
-
-                  />
-                  <InputText
+                <form onSubmit={onSubmit} className="feedback-form">
+                  <div className="feedback-form-top">
+                    <InputText
+                      key="name"
+                      name="name"
+                      control={control}
+                      status={true}
+                      label="Name"
+                      fullWith={false}
+                    />
+                    <InputText
                       key="number"
                       name="number"
                       control={control}
                       status={true}
                       label="Number"
-                      size="small"
                       fullWith={false}
+                    />
+                  </div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <div className="feedback-form-top">
+                      <TimePicker
+                        label="Start"
+                        name="start"
+                        control={control}
+                      />
+                      <TimePicker label="End" name="end" control={control} />
+                    </div>
+                  </LocalizationProvider>
+                  <MultiLine
+                    key="message"
+                    name="message"
+                    label="Message"
+                    control={control}
                   />
-                  <button type="submit">Send</button>
+                  <button className="karl-checkout-btn">Send</button>
                 </form>
               </div>
             </div>

@@ -1,8 +1,19 @@
-.footer-logo{
+.footer-logo {
   display: flex;
   justify-content: center;
-  img{
+  img {
     width: 100px;
     height: auto;
+  }
+}
+
+.feedback-form {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+
+  &-top {
+    display: flex;
+    gap: 15px;
   }
 }

@@ -25,7 +25,6 @@ function Main() {
   const navigate = useNavigate();
   const isAuth = useIsAuthorized();
   const [currentProduct, setSetCurrentProduct] = useState<any>({});
-    console.log(currentProduct)
   const cart = useAppSelector((state) => state.cartReduser.cart);
   let notify = new Notification();
 

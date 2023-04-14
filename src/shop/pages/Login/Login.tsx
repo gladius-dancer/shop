@@ -9,11 +9,13 @@ import { useIsAuthorized } from "../../hooks/useIsAuthorized";
 import { Notification } from "../../../utils/notification";
 
 function Login() {
+
   const {
     methods: { control },
     onSubmit,
     errors,
   } = useLoginForm();
+
   const userStatus = useIsAuthorized();
   const navigate = useNavigate();
   const notify = new Notification();
