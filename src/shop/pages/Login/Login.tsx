@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import images from "../../assets";
-import { InputText } from "../../components/FormComponents/InputText";
+import images from "../../../assets";
+import { InputText } from "../../../components/FormComponents/InputText";
 import "react-toastify/scss/main.scss";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { useLoginForm } from "./hooks/useLoginForm";
-import { useIsAuthorized } from "../../hooks/useIsAuthorized";
+import { useIsAuthorized } from "../../../hooks/useIsAuthorized";
 import { Notification } from "../../../utils/notification";
 
 function Login() {

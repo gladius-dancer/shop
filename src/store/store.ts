@@ -7,6 +7,7 @@ import cartReduser from "./reducers/CartSlice";
 import priceReduser from "./reducers/PriceSlice";
 import favoriteReduser from "./reducers/FavoriteSlice";
 import shippingReduser from "./reducers/ShippingSlice";
+import ordersReduser from "./reducers/OrdersSlice";
 
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   cartReduser,
   priceReduser,
   favoriteReduser,
-  shippingReduser
+  shippingReduser,
+  ordersReduser
 
 });
 

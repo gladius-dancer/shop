@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useEffect } from "react";
-import Footer from "../../components/Footer/Footer";
-import Header from "../../components/Header/Header";
-import Categories from "../../components/Categories/Categories";
+import Footer from "../../../components/Footer/Footer";
+import Header from "../../../components/Header/Header";
+import Categories from "../../../components/Categories/Categories";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useRedux";
 import { update } from "../../../store/reducers/CartSlice";
 import { setPrice } from "../../../store/reducers/PriceSlice";
 import { setShipping } from "../../../store/reducers/ShippingSlice";

@@ -1,76 +1,128 @@
-import {AppDispatch} from "../store";
+import { AppDispatch } from "../store";
 import axios from "axios";
-import {authSlice} from "./AuthSlice.ts";
-import {categoriesSlice} from "./CategorySlice.ts";
-import {productsSlice} from "./ProductsSlice";
-import {LoginType} from "../../types/LoginType";
-import {FeedbackType} from "../../types/FeedbackType";
+import { authSlice } from "./AuthSlice.ts";
+import { categoriesSlice } from "./CategorySlice.ts";
+import { productsSlice } from "./ProductsSlice";
+import { LoginType } from "../../types/LoginType";
+import { FeedbackType } from "../../types/FeedbackType";
+import { ordersSlice } from "./OrdersSlice";
 
+const $api = axios.create({
+  baseURL: "https://ecommerce.icedev.uz",
+});
 
-export const login = (data: LoginType)=> async (dispatch: AppDispatch) => {
+export const login = (data: LoginType) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(authSlice.actions.login());
+
+    const res = $api.post("token");
+
+    const response = await axios.post(
+      "https://ecommerce.icedev.uz/token",
+      {
+        username: data.username,
+        password: data.password,
+      },
+      {
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
+      }
+    );
+    localStorage.setItem("token", JSON.stringify(response.data));
+    localStorage.setItem("authStatus", JSON.stringify("true"));
+    dispatch(authSlice.actions.loginSuccess(true));
+  } catch (e: any) {
+    dispatch(authSlice.actions.loginError(e.message));
+  }
+};
+
+export const sendFeedback =
+  (data: FeedbackType) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(authSlice.actions.login())
-        const response = await axios.post(
-            "https://ecommerce.icedev.uz/token",
-            {
-                username: data.username,
-                password: data.password
-            },
-            {
-                headers:{
-                    'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                }
-            })
-            localStorage.setItem("token", JSON.stringify(response.data));
-            localStorage.setItem("authStatus", JSON.stringify("true"));
-            dispatch(authSlice.actions.loginSuccess(true))
-    } catch (e: any) {
-        dispatch(authSlice.actions.loginError(e.message))
-    }
-}
+      await axios.post(
+        "https://ecommerce.icedev.uz/call_orders",
+        {
+          full_name: data.name,
+          phone_number: data.number,
+          start_time: new Date(data.start).toLocaleTimeString(),
+          end_time: new Date(data.end).toLocaleTimeString(),
+          comment: data.message,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (e: any) {}
+  };
 
-export const sendFeedback = (data: FeedbackType)=> async (dispatch: AppDispatch) => {
-    console.log(typeof(data.start))
-    try {
-        const response = await axios.post(
-            "https://ecommerce.icedev.uz/call_orders",
-            {
-                "full_name": data.name,
-                "phone_number": data.number,
-                "start_time": data.start,
-                "end_time": data.end,
-                "comment": data.message
-            })
-    } catch (e: any) {
-    }
-}
+export const getCategories = () => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios.get("https://ecommerce.icedev.uz/categories");
+    dispatch(
+      categoriesSlice.actions.setCategories(
+        response.data.filter((item) => item.children_category.length > 0)
+      )
+    );
+  } catch (e) {}
+};
 
-export const getCategories = ()=> async (dispatch: AppDispatch)=>{
-    try{
-        const response = await axios.get("https://ecommerce.icedev.uz/categories");
-        dispatch(categoriesSlice.actions.setCategories(response.data))
-    }
-    catch(e){
+export const getProducts = () => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios.get("https://ecommerce.icedev.uz/products/");
+    dispatch(productsSlice.actions.getProducts(response.data));
+  } catch (e) {}
+};
 
-    }
-}
+export const addNewProduct = (data) => async () => {
+  try {
+    await axios.post(
+      "https://ecommerce.icedev.uz/products",
+      {
+        product: {
+          name: data.name,
+          price: data.price,
+          description: data.price,
+          quantity: data.count,
+          discount: data.discount,
+          category_id: data.category,
+        },
+        product_images: [
+          {
+            image_path: data.image,
+          },
+        ],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (e) {}
+};
 
-export const getProducts = ()=> async (dispatch: AppDispatch)=>{
-    try{
-        const response = await axios.get("https://ecommerce.icedev.uz/products/");
-        dispatch(productsSlice.actions.getProducts(response.data))
-    }
-    catch(e){
+export const deleteProduct = (id) => async () => {
+  try {
+    await axios.delete(
+        `https://ecommerce.icedev.uz/products/${id}`);
+  } catch (e) {}
+};
 
-    }
-}
+export const getOrders = () => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios.get("https://ecommerce.icedev.uz/orders");
+    dispatch(ordersSlice.actions.getOrders(response.data));
+  } catch (e) {}
+};
 
-export const getLimitedProducts = ()=> async (dispatch: AppDispatch)=>{
-    try{
-        const response = await axios.get("https://ecommerce.icedev.uz/products?limit=5");
-        dispatch(productsSlice.actions.getProducts(response.data))
-    }
-    catch(e){
-
-    }
-}
+export const getLimitedProducts = () => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios.get(
+      "https://ecommerce.icedev.uz/products?limit=5"
+    );
+    dispatch(productsSlice.actions.getProducts(response.data));
+  } catch (e) {}
+};
