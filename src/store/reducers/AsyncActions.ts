@@ -6,6 +6,9 @@ import { productsSlice } from "./ProductsSlice";
 import { LoginType } from "../../types/LoginType";
 import { FeedbackType } from "../../types/FeedbackType";
 import { ordersSlice } from "./OrdersSlice";
+import { Notification } from "../../utils/notification";
+
+const notify = new Notification();
 
 const $api = axios.create({
   baseURL: "https://ecommerce.icedev.uz",
@@ -15,9 +18,7 @@ export const login = (data: LoginType) => async (dispatch: AppDispatch) => {
   try {
     dispatch(authSlice.actions.login());
 
-    const res = $api.post("token");
-
-    const response = await axios.post(
+    const response = await $api.post(
       "https://ecommerce.icedev.uz/token",
       {
         username: data.username,
@@ -40,7 +41,7 @@ export const login = (data: LoginType) => async (dispatch: AppDispatch) => {
 export const sendFeedback =
   (data: FeedbackType) => async (dispatch: AppDispatch) => {
     try {
-      await axios.post(
+      const response = await $api.post(
         "https://ecommerce.icedev.uz/call_orders",
         {
           full_name: data.name,
@@ -60,7 +61,7 @@ export const sendFeedback =
 
 export const getCategories = () => async (dispatch: AppDispatch) => {
   try {
-    const response = await axios.get("https://ecommerce.icedev.uz/categories");
+    const response = await $api.get("https://ecommerce.icedev.uz/categories");
     dispatch(
       categoriesSlice.actions.setCategories(
         response.data.filter((item) => item.children_category.length > 0)
@@ -71,14 +72,14 @@ export const getCategories = () => async (dispatch: AppDispatch) => {
 
 export const getProducts = () => async (dispatch: AppDispatch) => {
   try {
-    const response = await axios.get("https://ecommerce.icedev.uz/products/");
+    const response = await $api.get("https://ecommerce.icedev.uz/products/");
     dispatch(productsSlice.actions.getProducts(response.data));
   } catch (e) {}
 };
 
 export const addNewProduct = (data) => async () => {
   try {
-    await axios.post(
+    const response = await $api.post(
       "https://ecommerce.icedev.uz/products",
       {
         product: {
@@ -106,21 +107,27 @@ export const addNewProduct = (data) => async () => {
 
 export const deleteProduct = (id) => async () => {
   try {
-    await axios.delete(
-        `https://ecommerce.icedev.uz/products/${id}`);
+    const response = await $api.delete(
+      `https://ecommerce.icedev.uz/products/${id}`
+    );
+    notify.showSuccess("Product deleted!");
+
+    // if (response.status === 200) {
+    //   notify.showSuccess("Product deleted!");
+    // }
   } catch (e) {}
 };
 
 export const getOrders = () => async (dispatch: AppDispatch) => {
   try {
-    const response = await axios.get("https://ecommerce.icedev.uz/orders");
+    const response = await $api.get("https://ecommerce.icedev.uz/orders");
     dispatch(ordersSlice.actions.getOrders(response.data));
   } catch (e) {}
 };
 
 export const getLimitedProducts = () => async (dispatch: AppDispatch) => {
   try {
-    const response = await axios.get(
+    const response = await $api.get(
       "https://ecommerce.icedev.uz/products?limit=5"
     );
     dispatch(productsSlice.actions.getProducts(response.data));

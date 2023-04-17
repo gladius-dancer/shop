@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import {useAppDispatch, useAppSelector} from "../../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditAttributesIcon from "@mui/icons-material/EditAttributes";
@@ -16,15 +16,18 @@ import IconButton from "@mui/material/IconButton";
 import ModalComponent from "../Modal/ModalComponent";
 import { useState } from "react";
 import { Button } from "@mui/material";
-import {InputText} from "../FormComponents/InputText";
+import { InputText } from "../FormComponents/InputText";
 import TextField from "@mui/material/TextField";
-import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
-import {useForm} from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import {Dropdown} from "../FormComponents/Dropdown";
-import {MultiLine} from "../FormComponents/MultiLine";
-import CloseIcon from '@mui/icons-material/Close';
-import {addNewProduct, deleteProduct} from "../../store/reducers/AsyncActions";
+import { Dropdown } from "../FormComponents/Dropdown";
+import { MultiLine } from "../FormComponents/MultiLine";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  addNewProduct,
+  deleteProduct,
+} from "../../store/reducers/AsyncActions";
 
 interface Column {
   id:
@@ -85,10 +88,24 @@ const columns: readonly Column[] = [
 
 export default function Products() {
   const [page, setPage] = React.useState(0);
+  const [query, setQuery] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const products = useAppSelector((state) => state.productsReduser.products);
-  const category = useAppSelector(state => state.categoriesReduser.categories);
-  const categories = category.reduce((acc: any, item: any)=>{acc.push({label: item.name, value: item.id}); return acc}, []);
+  const category = useAppSelector(
+    (state) => state.categoriesReduser.categories
+  );
+  const filteredProducts = products.filter((item) =>
+      item.name.toLowerCase().startsWith(query.toLowerCase())
+  );
+
+  const handleSearch = (event)=>{
+      setQuery(event.target.value);
+  }
+
+  const categories = category.reduce((acc: any, item: any) => {
+    acc.push({ label: item.name, value: item.id });
+    return acc;
+  }, []);
   const [modal, setModal] = useState(false);
   const dispatch = useAppDispatch();
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -110,22 +127,32 @@ export default function Products() {
     discount: yup.number().required(),
     category: yup.string().required(),
     image: yup.string().required(),
-
   });
 
-  const methods = useForm({resolver: yupResolver(schema)});
-  const {handleSubmit, control, setValue, formState: {errors}} = methods;
+  const methods = useForm({ resolver: yupResolver(schema) });
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = methods;
   const onSubmit = async (data: any) => {
     dispatch(addNewProduct(data));
-    console.log(data)
-  }
+  };
 
   return (
     <>
       <div className="products-top">
-        <Button onClick={()=>setModal(true)} variant="contained">Create product</Button>
+        <Button onClick={() => setModal(true)} variant="contained">
+          Create product
+        </Button>
         <div className="product-search">
-          <span>Search: </span> <TextField size="small"  variant="outlined" />
+          <span>Search: </span>{" "}
+          <TextField
+            onChange={handleSearch}
+            size="small"
+            variant="outlined"
+          />
         </div>
       </div>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -145,7 +172,7 @@ export default function Products() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {products.map((item) => (
+              {filteredProducts.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="product-image">
                     <img src={item.images[0].image_path} alt="" />
@@ -160,10 +187,12 @@ export default function Products() {
                     <IconButton>
                       <EditAttributesIcon color="primary" />
                     </IconButton>
-                    <IconButton onClick={()=>setModal(true)}>
+                    <IconButton onClick={() => setModal(true)}>
                       <SettingsIcon />
                     </IconButton>
-                    <IconButton onClick={()=>dispatch(deleteProduct(item.id))}>
+                    <IconButton
+                      onClick={() => dispatch(deleteProduct(item.id))}
+                    >
                       <DeleteIcon color="error" />
                     </IconButton>
                   </TableCell>
@@ -190,25 +219,56 @@ export default function Products() {
         <div className="add-modal">
           <div className="modal-header">
             <IconButton onClick={() => setModal(false)} className="modal-close">
-              <CloseIcon/>
+              <CloseIcon />
             </IconButton>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="add-form">
-            <InputText status={true} name="name" label="Name" control={control}/>
-            <MultiLine name="description" label="Description" control={control}/>
-            <InputText status={true} name="price" label="Price" control={control}/>
+            <InputText
+              status={true}
+              name="name"
+              label="Name"
+              control={control}
+            />
+            <MultiLine
+              name="description"
+              label="Description"
+              control={control}
+            />
+            <InputText
+              status={true}
+              name="price"
+              label="Price"
+              control={control}
+            />
             <div className="counts">
-              <InputText status={true} name="count" label="Count" control={control}/>
-              <InputText status={true} name="discount" label="Discount" control={control}/>
+              <InputText
+                status={true}
+                name="count"
+                label="Count"
+                control={control}
+              />
+              <InputText
+                status={true}
+                name="discount"
+                label="Discount"
+                control={control}
+              />
             </div>
             <Dropdown
-                key="category"
-                name="category"
-                control={control}
-                options={categories}
+              key="category"
+              name="category"
+              control={control}
+              options={categories}
             />
-            <InputText status={true} name="image" label="Image link" control={control}/>
-            <Button type="submit" variant="contained">Add</Button>
+            <InputText
+              status={true}
+              name="image"
+              label="Image link"
+              control={control}
+            />
+            <Button type="submit" variant="contained">
+              Add
+            </Button>
           </form>
         </div>
       </ModalComponent>
