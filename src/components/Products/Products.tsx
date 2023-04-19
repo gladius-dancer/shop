@@ -14,7 +14,7 @@ import EditAttributesIcon from "@mui/icons-material/EditAttributes";
 import "./Products.scss";
 import IconButton from "@mui/material/IconButton";
 import ModalComponent from "../Modal/ModalComponent";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Button } from "@mui/material";
 import { InputText } from "../FormComponents/InputText";
 import TextField from "@mui/material/TextField";
@@ -24,10 +24,8 @@ import * as yup from "yup";
 import { Dropdown } from "../FormComponents/Dropdown";
 import { MultiLine } from "../FormComponents/MultiLine";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-  addNewProduct,
-  deleteProduct,
-} from "../../store/reducers/AsyncActions";
+import { productAPI } from "../../services/ProductService";
+import {ProductSendType} from "../../types/ProductSendType";
 
 interface Column {
   id:
@@ -88,19 +86,27 @@ const columns: readonly Column[] = [
 
 export default function Products() {
   const [page, setPage] = React.useState(0);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const products = useAppSelector((state) => state.productsReduser.products);
+
+  const {
+    data: products,
+    error,
+    status,
+  } = productAPI.useFetchAllProductsQuery("");
+  const [createProduct, {}] = productAPI.useCreateProductMutation();
+  const [deleteProduct, {}] = productAPI.useDeleteProductMutation();
+
   const category = useAppSelector(
     (state) => state.categoriesReduser.categories
   );
-  const filteredProducts = products.filter((item) =>
-      item.name.toLowerCase().startsWith(query.toLowerCase())
+  const filteredProducts = products?.filter((item) =>
+    item.name.toLowerCase().startsWith(query.toLowerCase())
   );
 
-  const handleSearch = (event)=>{
-      setQuery(event.target.value);
-  }
+  const handleSearch = (event) => {
+    setQuery(event.target.value);
+  };
 
   const categories = category.reduce((acc: any, item: any) => {
     acc.push({ label: item.name, value: item.id });
@@ -118,6 +124,30 @@ export default function Products() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const handleCreate = async (product) => {
+    let data = {
+      product: {
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        quantity: product.count,
+        discount: product.discount,
+        category_id: product.category,
+      },
+      product_images: [
+        {
+          image_path: product.image,
+        },
+      ],
+    };
+    await createProduct(data);
+  };
+
+  const handleDelete = async (id) => {
+    console.log(id)
+    await deleteProduct(id);
+  }
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -137,8 +167,10 @@ export default function Products() {
     formState: { errors },
   } = methods;
   const onSubmit = async (data: any) => {
-    dispatch(addNewProduct(data));
+    handleCreate(data);
   };
+
+
 
   return (
     <>
@@ -148,11 +180,7 @@ export default function Products() {
         </Button>
         <div className="product-search">
           <span>Search: </span>{" "}
-          <TextField
-            onChange={handleSearch}
-            size="small"
-            variant="outlined"
-          />
+          <TextField onChange={handleSearch} size="small" variant="outlined" />
         </div>
       </div>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -172,7 +200,7 @@ export default function Products() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredProducts.map((item) => (
+              {filteredProducts?.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="product-image">
                     <img src={item.images[0].image_path} alt="" />
@@ -191,7 +219,7 @@ export default function Products() {
                       <SettingsIcon />
                     </IconButton>
                     <IconButton
-                      onClick={() => dispatch(deleteProduct(item.id))}
+                      onClick={() => handleDelete(item.id)}
                     >
                       <DeleteIcon color="error" />
                     </IconButton>

@@ -16,17 +16,21 @@ import ModalComponent from "../../../components/Modal/ModalComponent";
 import QuickView from "../../../components/QuickView/QuickView";
 import { ToastContainer } from "react-toastify";
 import { Notification } from "../../../utils/notification";
+import {productAPI} from "../../../services/ProductService";
+
 
 function Main() {
   const dispatch = useAppDispatch();
   const nav = useAppSelector((state) => state.navReducer);
-  const products = useAppSelector((state) => state.productsReduser.products);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const isAuth = useIsAuthorized();
   const [currentProduct, setSetCurrentProduct] = useState<any>({});
   const cart = useAppSelector((state) => state.cartReduser.cart);
   let notify = new Notification();
+
+    const {data: products, error, isLoading} =  productAPI.useFetchAllProductsQuery("");
+
 
   const addToCart = (id: number) => {
     if (isAuth) {

@@ -6,7 +6,7 @@ import Main from "./shop/pages/Main/Main";
 import Login from "./shop/pages/Login/Login";
 import { useEffect } from "react";
 import { useAppDispatch } from "./hooks/useRedux";
-import { getCategories, getProducts } from "./store/reducers/AsyncActions";
+import { getCategories } from "./store/reducers/AsyncActions";
 import Panel from "./admin-panel/pages/Panel";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Orders from "./components/Orders/Orders";
@@ -17,15 +17,20 @@ import Country from "./components/Country/Country";
 import Callback from "./components/Callback/Callback";
 import { authSlice } from "./store/reducers/AuthSlice";
 import Cart from "./shop/pages/Cart/Cart";
+import {productAPI} from "./services/ProductService";
+import Loader from "./components/Loader/Loader";
 
 Modal.setAppElement("#root");
 
 const App = () => {
   const dispatch = useAppDispatch();
+  const {
+    isLoading,
+  } = productAPI.useFetchAllProductsQuery("");
 
   useEffect(() => {
     dispatch(getCategories());
-    dispatch(getProducts());
+    // dispatch(getProducts());
     JSON.parse(localStorage.getItem("authStatus")) === "true"
       ? dispatch(authSlice.actions.loginSuccess(true))
       : dispatch(authSlice.actions.loginSuccess(false));
@@ -33,24 +38,28 @@ const App = () => {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={"/"} element={<Main />} />
-        <Route path={"/login"} element={<Login />} />
-        <Route path={"/cart"} element={<Cart />} />
-        <Route path={"/admin"} element={<Panel />}>
-          <Route index element={<Dashboard />} />
-          <Route path={"dashboard"} element={<Dashboard />} />
-          <Route path={"orders"} element={<Orders />} />
-          <Route path={"products"} element={<Products />} />
-          <Route path={"users"} element={<Users />} />
-          <Route path={"category"} element={<Category />} />
-          <Route path={"country"} element={<Country />} />
-          <Route path={"callback"} element={<Callback />} />
-        </Route>
-        <Route path="*" element={<h2>Route not found</h2>} />
-      </Routes>
-    </BrowserRouter>
+      <>
+        <BrowserRouter>
+          <Routes>
+            <Route path={"/"} element={<Main />} />
+            <Route path={"/login"} element={<Login />} />
+            <Route path={"/cart"} element={<Cart />} />
+            <Route path={"/admin"} element={<Panel />}>
+              <Route index element={<Dashboard />} />
+              <Route path={"dashboard"} element={<Dashboard />} />
+              <Route path={"orders"} element={<Orders />} />
+              <Route path={"products"} element={<Products />} />
+              <Route path={"users"} element={<Users />} />
+              <Route path={"category"} element={<Category />} />
+              <Route path={"country"} element={<Country />} />
+              <Route path={"callback"} element={<Callback />} />
+            </Route>
+            <Route path="*" element={<h2>Route not found</h2>} />
+          </Routes>
+        </BrowserRouter>
+        {isLoading && <Loader/>}
+      </>
+
   );
 };
 

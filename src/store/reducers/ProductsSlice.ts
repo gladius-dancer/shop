@@ -1,23 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-//@ts-ignore
 import { ProductType } from "../../types/ProductType";
 
-type ProductsState = {
-  products: ProductType[];
-};
+interface ProductsSlice {
+  isLoading: boolean,
+  error: string
+  products: ProductType[]
+}
 
-const initialState: ProductsState = {
+const initialState: ProductsSlice = {
+  isLoading: false,
+  error: "",
   products: [],
 };
 
 export const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {
-    getProducts(state, action: PayloadAction<ProductType[]>) {
-      state.products = action.payload;
-    },
-  },
+  reducers: {}
 });
 
 export default productsSlice.reducer;

@@ -7,6 +7,8 @@ import { LoginType } from "../../types/LoginType";
 import { FeedbackType } from "../../types/FeedbackType";
 import { ordersSlice } from "./OrdersSlice";
 import { Notification } from "../../utils/notification";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {ProductType} from "../../types/ProductType";
 
 const notify = new Notification();
 
@@ -70,53 +72,7 @@ export const getCategories = () => async (dispatch: AppDispatch) => {
   } catch (e) {}
 };
 
-export const getProducts = () => async (dispatch: AppDispatch) => {
-  try {
-    const response = await $api.get("https://ecommerce.icedev.uz/products/");
-    dispatch(productsSlice.actions.getProducts(response.data));
-  } catch (e) {}
-};
 
-export const addNewProduct = (data) => async () => {
-  try {
-    const response = await $api.post(
-      "https://ecommerce.icedev.uz/products",
-      {
-        product: {
-          name: data.name,
-          price: data.price,
-          description: data.price,
-          quantity: data.count,
-          discount: data.discount,
-          category_id: data.category,
-        },
-        product_images: [
-          {
-            image_path: data.image,
-          },
-        ],
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } catch (e) {}
-};
-
-export const deleteProduct = (id) => async () => {
-  try {
-    const response = await $api.delete(
-      `https://ecommerce.icedev.uz/products/${id}`
-    );
-    notify.showSuccess("Product deleted!");
-
-    // if (response.status === 200) {
-    //   notify.showSuccess("Product deleted!");
-    // }
-  } catch (e) {}
-};
 
 export const getOrders = () => async (dispatch: AppDispatch) => {
   try {
@@ -125,11 +81,5 @@ export const getOrders = () => async (dispatch: AppDispatch) => {
   } catch (e) {}
 };
 
-export const getLimitedProducts = () => async (dispatch: AppDispatch) => {
-  try {
-    const response = await $api.get(
-      "https://ecommerce.icedev.uz/products?limit=5"
-    );
-    dispatch(productsSlice.actions.getProducts(response.data));
-  } catch (e) {}
-};
+
+
