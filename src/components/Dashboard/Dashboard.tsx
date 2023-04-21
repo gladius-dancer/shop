@@ -13,6 +13,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import EditAttributesIcon from "@mui/icons-material/EditAttributes";
 import "./Dashboard.scss";
 import IconButton from "@mui/material/IconButton";
+import {productAPI} from "../../services/ProductServices";
 
 interface Column {
     id:
@@ -74,7 +75,8 @@ const columns: readonly Column[] = [
 export default function Dashboard() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const products = useAppSelector((state) => state.productsReduser.products);
+    // const products = useAppSelector((state) => state.productsReduser.products);
+    const {data: products, isLoading, error} = productAPI.useFetchAllProductsQuery("");
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -104,8 +106,8 @@ export default function Dashboard() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {products.map((item) => (
-                            <TableRow hover role="checkbox">
+                        {products?.map((item) => (
+                            <TableRow key={item.id} hover role="checkbox">
                                 <TableCell className="product-image">
                                     <img src={item.images[0].image_path} alt="" />
                                 </TableCell>

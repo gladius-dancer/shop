@@ -14,7 +14,7 @@ import EditAttributesIcon from "@mui/icons-material/EditAttributes";
 import "./Products.scss";
 import IconButton from "@mui/material/IconButton";
 import ModalComponent from "../Modal/ModalComponent";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { InputText } from "../FormComponents/InputText";
 import TextField from "@mui/material/TextField";
@@ -24,96 +24,22 @@ import * as yup from "yup";
 import { Dropdown } from "../FormComponents/Dropdown";
 import { MultiLine } from "../FormComponents/MultiLine";
 import CloseIcon from "@mui/icons-material/Close";
-import { productAPI } from "../../services/ProductService";
-import {ProductSendType} from "../../types/ProductSendType";
-
-interface Column {
-  id:
-    | "phote"
-    | "name"
-    | "description"
-    | "category"
-    | "price"
-    | "count"
-    | "discount"
-    | "actions";
-  label: string;
-  minWidth?: number;
-  align?: "center" | "left";
-  format?: (value: number) => string;
-}
-
-const columns: readonly Column[] = [
-  { id: "phote", label: "Phote", align: "left", minWidth: 50 },
-  { id: "name", label: "Name", align: "left", minWidth: 150 },
-  { id: "description", label: "Description", align: "left", minWidth: 300 },
-  {
-    id: "category",
-    label: "Category",
-    minWidth: 100,
-    align: "left",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "price",
-    label: "Price",
-    minWidth: 90,
-    align: "left",
-    format: (value: number) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "count",
-    label: "Count",
-    minWidth: 50,
-    align: "left",
-    format: (value: number) => value.toFixed(2),
-  },
-  {
-    id: "discount",
-    label: "Discount",
-    minWidth: 50,
-    align: "left",
-    format: (value: number) => value.toFixed(2),
-  },
-  {
-    id: "actions",
-    label: "Actions",
-    minWidth: 100,
-    align: "left",
-    format: (value: number) => value.toFixed(2),
-  },
-];
+import useProducts from "./hooks/useProducts";
 
 export default function Products() {
+  const {
+    columns,
+    createProduct,
+    updateProduct,
+    filteredProducts,
+    deleteProduct,
+    categories,
+    handleSearch,
+  } = useProducts();
   const [page, setPage] = React.useState(0);
-  const [query, setQuery] = useState("");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const {
-    data: products,
-    error,
-    status,
-  } = productAPI.useFetchAllProductsQuery("");
-  const [createProduct, {}] = productAPI.useCreateProductMutation();
-  const [deleteProduct, {}] = productAPI.useDeleteProductMutation();
-
-  const category = useAppSelector(
-    (state) => state.categoriesReduser.categories
-  );
-  const filteredProducts = products?.filter((item) =>
-    item.name.toLowerCase().startsWith(query.toLowerCase())
-  );
-
-  const handleSearch = (event) => {
-    setQuery(event.target.value);
-  };
-
-  const categories = category.reduce((acc: any, item: any) => {
-    acc.push({ label: item.name, value: item.id });
-    return acc;
-  }, []);
-  const [modal, setModal] = useState(false);
-  const dispatch = useAppDispatch();
+  const [modal, setModal] = useState({ status: false, type: "", data: {} });
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -144,10 +70,29 @@ export default function Products() {
     await createProduct(data);
   };
 
+  const handleUpdate = async (id, product) => {
+    let data = {
+      product: {
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        quantity: product.count,
+        discount: product.discount,
+        category_id: product.category,
+      },
+      product_images: [
+        {
+          image_path: product.image,
+        },
+      ],
+    };
+    await updateProduct({id, payload: data});
+  };
+
   const handleDelete = async (id) => {
-    console.log(id)
+    console.log(id);
     await deleteProduct(id);
-  }
+  };
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -159,7 +104,15 @@ export default function Products() {
     image: yup.string().required(),
   });
 
-  const methods = useForm({ resolver: yupResolver(schema) });
+  const methods = useForm({ resolver: yupResolver(schema), defaultValues:{
+      name: modal.data.name,
+      description: modal.data.description,
+      price: modal.data.price,
+      count: modal.data.count,
+      discount: modal.data.discount,
+      category: modal.data.category,
+      image: modal.data.image_path,
+    } });
   const {
     handleSubmit,
     control,
@@ -167,15 +120,18 @@ export default function Products() {
     formState: { errors },
   } = methods;
   const onSubmit = async (data: any) => {
-    handleCreate(data);
+    console.log(data)
+    switch(modal.type){
+      case "add": handleCreate(data); break;
+      case "update": handleUpdate(modal.data?.id, data); break;
+    }
+
   };
-
-
 
   return (
     <>
       <div className="products-top">
-        <Button onClick={() => setModal(true)} variant="contained">
+        <Button onClick={() => setModal({status: true, type: "add", data: {}})} variant="contained">
           Create product
         </Button>
         <div className="product-search">
@@ -215,12 +171,27 @@ export default function Products() {
                     <IconButton>
                       <EditAttributesIcon color="primary" />
                     </IconButton>
-                    <IconButton onClick={() => setModal(true)}>
+                    <IconButton
+                      onClick={() =>
+                        setModal({
+                          status: true,
+                          type: "update",
+                          data: {
+                            id: item.id,
+                            name: item.name,
+                            description: item.description,
+                            category: item.category.id,
+                            price: item.price,
+                            quantity: item.quantity,
+                            discount: item.discount,
+                            image_path: item.images[0].image_path
+                          },
+                        })
+                      }
+                    >
                       <SettingsIcon />
                     </IconButton>
-                    <IconButton
-                      onClick={() => handleDelete(item.id)}
-                    >
+                    <IconButton onClick={() => handleDelete(item.id)}>
                       <DeleteIcon color="error" />
                     </IconButton>
                   </TableCell>
@@ -240,13 +211,16 @@ export default function Products() {
         />
       </Paper>
       <ModalComponent
-        isOpen={modal}
+        isOpen={modal.status}
         className="modal"
         overlayClassName="modal-overlay"
       >
         <div className="add-modal">
           <div className="modal-header">
-            <IconButton onClick={() => setModal(false)} className="modal-close">
+            <IconButton
+              onClick={() => setModal({ status: false, data: {} })}
+              className="modal-close"
+            >
               <CloseIcon />
             </IconButton>
           </div>
@@ -255,17 +229,20 @@ export default function Products() {
               status={true}
               name="name"
               label="Name"
+              defaultValue={modal.data?.name}
               control={control}
             />
             <MultiLine
               name="description"
               label="Description"
+              defaultValue={modal.data?.description}
               control={control}
             />
             <InputText
               status={true}
               name="price"
               label="Price"
+              defaultValue={modal.data?.price}
               control={control}
             />
             <div className="counts">
@@ -273,12 +250,14 @@ export default function Products() {
                 status={true}
                 name="count"
                 label="Count"
+                defaultValue={modal.data?.quantity}
                 control={control}
               />
               <InputText
                 status={true}
                 name="discount"
                 label="Discount"
+                defaultValue={modal.data?.discount}
                 control={control}
               />
             </div>
@@ -287,11 +266,13 @@ export default function Products() {
               name="category"
               control={control}
               options={categories}
+              defaultValue={modal.data?.category}
             />
             <InputText
               status={true}
               name="image"
               label="Image link"
+              defaultValue={modal.data?.image_path}
               control={control}
             />
             <Button type="submit" variant="contained">

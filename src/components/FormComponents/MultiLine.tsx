@@ -2,13 +2,11 @@ import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 
-export const MultiLine = ({ name, control, label }) => {
+export const MultiLine = ({ name, control, label, defaultValue, value }) => {
     return (
         <Controller
             name={name}
             control={control}
-            defaultValue={''}
-
             render={({
                          field: { onChange, value },
                          fieldState: { error },
@@ -24,6 +22,7 @@ export const MultiLine = ({ name, control, label }) => {
                     fullWidth
                     label={label}
                     variant="outlined"
+                    defaultValue={defaultValue}
                     multiline
                     rows={3}
                 />

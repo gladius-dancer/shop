@@ -30,10 +30,10 @@ export const productAPI = createApi({
         method: "POST",
         body: product,
         headers: {
-            'Content-type': 'application/json'
+          "Content-type": "application/json",
         },
       }),
-      invalidatesTags: ['Products']
+      invalidatesTags: ["Products"],
     }),
 
     deleteProduct: build.mutation<string, string>({
@@ -41,21 +41,24 @@ export const productAPI = createApi({
         url: `/products/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ['Products']
+      invalidatesTags: ["Products"],
     }),
 
     updateProduct: build.mutation<ProductSendType, ProductSendType>({
-      query: (product) => ({
-        url: "/products",
-        method: "POST",
-        body: product,
-        headers: {
-          'Content-type': 'application/json'
-        },
-      }),
-      invalidatesTags: ['Products']
+      query: (data) => {
+        const {id, product} = data;
+        console.log(data)
+        return {
+          url: `/products/${id}`,
+              method: "PUT",
+            body: product,
+            headers: {
+          "Content-type": "application/json",
+        }
+        }
+
+      },
+      invalidatesTags: ["Products"],
     }),
-
-
   }),
 });

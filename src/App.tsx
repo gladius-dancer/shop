@@ -17,7 +17,7 @@ import Country from "./components/Country/Country";
 import Callback from "./components/Callback/Callback";
 import { authSlice } from "./store/reducers/AuthSlice";
 import Cart from "./shop/pages/Cart/Cart";
-import {productAPI} from "./services/ProductService";
+import {productAPI} from "./services/ProductServices";
 import Loader from "./components/Loader/Loader";
 
 Modal.setAppElement("#root");

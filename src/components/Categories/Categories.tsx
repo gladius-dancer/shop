@@ -6,15 +6,16 @@ import {useAppDispatch, useAppSelector} from "../../hooks/useRedux";
 import {change} from "../../store/reducers/NavSlice";
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {categoryAPI} from "../../services/CategoryServices";
+import {CategoryType} from "../../types/CategoryType";
 
 function Categories() {
     const [expanded, setExpanded] = React.useState<string | false>(false);
     const dispatch = useAppDispatch();
 
-    const categories = useAppSelector(state => state.categoriesReduser.categories);
+    const {data: categories} = categoryAPI.useFetchAllCategoriesQuery("");
 
-    const loadFilteredProduct = (id: number) => {
-    }
+    const category = categories?.filter((item)=>item.children_category.length > 0);
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -29,7 +30,7 @@ function Categories() {
             <div className="nav-side-menu">
                 <div className="menu-list">
                     <h6>Categories</h6>
-                    {categories.map((item) => (
+                    {category?.map((item) => (
                         <Accordion key={item.id} expanded={expanded === `panel${item.id}`}
                                    onChange={handleChange(`panel${item.id}`)}>
                             <AccordionSummary

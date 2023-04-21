@@ -16,7 +16,7 @@ import ModalComponent from "../../../components/Modal/ModalComponent";
 import QuickView from "../../../components/QuickView/QuickView";
 import { ToastContainer } from "react-toastify";
 import { Notification } from "../../../utils/notification";
-import {productAPI} from "../../../services/ProductService";
+import {productAPI} from "../../../services/ProductServices";
 
 
 function Main() {
@@ -35,7 +35,7 @@ function Main() {
   const addToCart = (id: number) => {
     if (isAuth) {
       notify.showSuccess("Product added");
-      const product = products.filter((item: CartType) => item.id === id)[0];
+      const product = products?.filter((item: CartType) => item.id === id)[0];
       const founded = cart.find((item: any) => item.id === id);
       Boolean(founded)
         ? dispatch(
@@ -62,7 +62,7 @@ function Main() {
 
   const showDetails = (id: number) => {
     setModal(true);
-    const current: ProductType = products.filter(
+    const current: ProductType | undefined = products?.filter(
       (product: ProductType) => product.id === id
     )[0];
     setSetCurrentProduct(current);

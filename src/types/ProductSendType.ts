@@ -1,4 +1,5 @@
 export type ProductSendType = {
+    id?:number,
     product:{
         id: number,
         name: string,

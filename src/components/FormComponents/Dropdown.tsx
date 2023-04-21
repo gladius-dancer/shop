@@ -1,9 +1,9 @@
 import React from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
-import { FormInputProps } from "./FormInputProps";
+import { FormProps } from "./FormProps";
 
-export const Dropdown = ({ name, control, label, options }: FormInputProps) => {
+export const Dropdown = ({ name, control, label, options, defaultValue }: FormProps) => {
   const generateSingleOptions = () => {
     return options.map((option: any) => {
       return (
@@ -18,9 +18,8 @@ export const Dropdown = ({ name, control, label, options }: FormInputProps) => {
     <FormControl sx={{ m: 0, minWidth: 120 }}>
       <InputLabel>{label}</InputLabel>
       <Controller
-        defaultValue={""}
         render={({ field: { onChange, value } }) => (
-          <Select onChange={onChange} value={value}>
+          <Select onChange={onChange} value={value} defaultValue={defaultValue}>
             {generateSingleOptions()}
           </Select>
         )}
