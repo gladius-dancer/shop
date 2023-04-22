@@ -16,8 +16,8 @@ import ModalComponent from "../../../components/Modal/ModalComponent";
 import QuickView from "../../../components/QuickView/QuickView";
 import { ToastContainer } from "react-toastify";
 import { Notification } from "../../../utils/notification";
-import {productAPI} from "../../../services/ProductServices";
-
+import { productAPI } from "../../../services/ProductServices";
+import { change } from "../../../store/reducers/ModalSlice";
 
 function Main() {
   const dispatch = useAppDispatch();
@@ -29,8 +29,11 @@ function Main() {
   const cart = useAppSelector((state) => state.cartReduser.cart);
   let notify = new Notification();
 
-    const {data: products, error, isLoading} =  productAPI.useFetchAllProductsQuery("");
-
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = productAPI.useFetchAllProductsQuery("");
 
   const addToCart = (id: number) => {
     if (isAuth) {
@@ -61,7 +64,7 @@ function Main() {
   };
 
   const showDetails = (id: number) => {
-    setModal(true);
+    dispatch(change());
     const current: ProductType | undefined = products?.filter(
       (product: ProductType) => product.id === id
     )[0];
@@ -114,7 +117,9 @@ function Main() {
       >
         <QuickView
           id={currentProduct.id}
-          image={currentProduct.images ? currentProduct.images[0].image_path:""}
+          image={
+            currentProduct.images ? currentProduct.images[0].image_path : ""
+          }
           title={currentProduct.name}
           price={currentProduct.price}
           description={currentProduct.description}

@@ -1,22 +1,34 @@
 import * as React from "react";
 import Modal from "react-modal";
+import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import "./Modal.scss";
+import { change } from "../../store/reducers/ModalSlice";
+import cn from "classnames";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 
 type ModalProps = {
-  isOpen: boolean,
-  children: any,
-  className: string,
-  overlayClassName: string
-}
+  children: any;
+};
 
-export default function ModalComponent({ isOpen, children, className, overlayClassName }: ModalProps) {
+export default function ModalComponent({ children }: ModalProps) {
+  const isOpen = useAppSelector((state) => state.modalReducer);
+  const dispatch = useAppDispatch();
 
   return (
-    <Modal
-      isOpen={isOpen}
-      className={className}
-      overlayClassName={overlayClassName}
-    >
-      {children}
-    </Modal>
+    <div className={cn("modal-back", isOpen ? "opened" : "")}>
+      <div className="modal-content">
+        <div className="modal-top">
+          <IconButton
+            className="modal-close"
+            onClick={() => dispatch(change())}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div>
+        {children}
+      </div>
+    </div>
   );
 }

@@ -847,11 +847,11 @@ ul li {
   z-index: 9;
 }
 
-.quickview_body {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
+//.quickview_body {
+//  position: relative;
+//  z-index: 1;
+//  overflow: hidden;
+//}
 
 .quickview_pro_img {
   border: 1px solid #f6f6f6;
@@ -1829,14 +1829,6 @@ ul li {
   border-right: none;
 }
 
-.modal-backdrop.show {
-  display: none !important;
-}
-
-.modal-content {
-  box-shadow: 1px 10px 30px rgba(0, 0, 0, 0.15);
-  border: 1px solid #ebebeb;
-}
 
 /* -------------------
 :: 18.0 Cart Page CSS
