@@ -22,11 +22,7 @@ export function ProductModal({ categories, data }: Props) {
       <div className="add-modal">
         <form onSubmit={onSubmit} className="add-form">
           <InputText status={true} name="name" label="Name" control={control} />
-          {/*<MultiLine*/}
-          {/*    name="description"*/}
-          {/*    label="Description"*/}
-          {/*    control={control}*/}
-          {/*/>*/}
+          <MultiLine name="description" label="Description" control={control} />
           <InputText
             status={true}
             name="price"
