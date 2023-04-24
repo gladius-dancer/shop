@@ -21,30 +21,13 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { change } from "../../store/reducers/ModalSlice";
 
 export default function Products() {
-  const {
-    columns,
-    createProduct,
-    updateProduct,
-    filteredProducts,
-    deleteProduct,
-    categories,
-    handleSearch,
-  } = useProducts();
+  const { columns, filteredProducts, deleteProduct, categories, handleSearch } =
+    useProducts();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const dispatch = useAppDispatch();
   const modal = useAppSelector((state) => state.modalReducer);
-
-  // const [modal, setModal] = useState({ status: false, type: "", data: {
-  //     name: "",
-  //     description: "",
-  //     price: "",
-  //     count: "",
-  //     discount: "",
-  //     category: "",
-  //     image: "",
-  //   } });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -57,48 +40,14 @@ export default function Products() {
     setPage(0);
   };
 
-  // const handleCreate = async (product) => {
-  //   let data = {
-  //     product: {
-  //       name: product.name,
-  //       price: product.price,
-  //       description: product.description,
-  //       quantity: product.count,
-  //       discount: product.discount,
-  //       category_id: product.category,
-  //     },
-  //     product_images: [
-  //       {
-  //         image_path: product.image,
-  //       },
-  //     ],
-  //   };
-  //   await createProduct(data);
-  // };
-
-  // const handleUpdate = async (id, product) => {
-  //   let data = {
-  //     product: {
-  //       name: product.name,
-  //       price: product.price,
-  //       description: product.description,
-  //       quantity: product.count,
-  //       discount: product.discount,
-  //       category_id: product.category,
-  //     },
-  //     product_images: [
-  //       {
-  //         image_path: product.image,
-  //       },
-  //     ],
-  //   };
-  //   await updateProduct({ id, payload: data });
-  // };
-
   const handleDelete = async (id) => {
-    console.log(id);
     await deleteProduct(id);
   };
+
+  function openCreateModal(item) {
+    dispatch(change());
+    setSelectedProduct({ data: {} });
+  }
 
   function openUpdateModal(item) {
     dispatch(change());
@@ -114,7 +63,7 @@ export default function Products() {
   return (
     <>
       <div className="products-top">
-        <Button onClick={() => dispatch(change())} variant="contained">
+        <Button onClick={() => openCreateModal({})} variant="contained">
           Create product
         </Button>
         <div className="product-search">

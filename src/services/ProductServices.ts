@@ -44,19 +44,17 @@ export const productAPI = createApi({
       invalidatesTags: ["Products"],
     }),
 
-    updateProduct: build.mutation<ProductSendType, ProductSendType>({
+    updateProduct: build.mutation<ProductSendType, any>({
       query: (data) => {
-        const {id, product} = data;
-        console.log(data)
+        const { id, product } = data;
         return {
           url: `/products/${id}`,
-              method: "PUT",
-            body: product,
-            headers: {
-          "Content-type": "application/json",
-        }
-        }
-
+          method: "PUT",
+          body: product,
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
       },
       invalidatesTags: ["Products"],
     }),

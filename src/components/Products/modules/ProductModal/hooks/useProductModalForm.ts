@@ -2,41 +2,67 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { ProductType } from "../../../../../types/ProductType";
 import * as yup from "yup";
-
-type FormData = ProductType;
+import { productAPI } from "../../../../../services/ProductServices";
+import { ProductSendType } from "../../../../../types/ProductSendType";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
   description: yup.string().required(),
   price: yup.number().required(),
-  count: yup.number().required(),
+  quantity: yup.number().required(),
   discount: yup.number().required(),
   category: yup.string().required(),
-  image: yup.string().required(),
+  images: yup.string().required(),
 });
 
-export function useProductModalForm(data?: ProductType) {
-  console.log(data);
-  const { handleSubmit, control } = useForm<FormData>({
+export function useProductModalForm(data) {
+  const [createProduct, {}] = productAPI.useCreateProductMutation();
+  const [updateProduct, {}] = productAPI.useUpdateProductMutation();
+
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: data?.name,
-      description: data?.description,
-      price: data?.price,
-      count: data?.quantity,
-      discount: data?.discount,
-      category: data?.category.id,
-      images: data?.images[0].image_path,
+      ...data,
+      category: data?.category?.id,
+      images: data?.images?.[0]?.image_path,
     },
   });
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
+  const onSubmit = async (formData: ProductType) => {
+    let payload: ProductSendType = {
+      product: {
+        name: formData.name,
+        price: formData.price,
+        description: formData.description,
+        quantity: formData.quantity,
+        discount: formData.discount,
+        category_id: Number(formData.category),
+      },
+      product_images: [
+        {
+          image_path: formData.images,
+        },
+      ],
+    };
+    if (Object.keys(data).length !== 0) {
+      console.log("Update");
+      updateProduct({ id: data.id, product: payload });
+    } else {
+      console.log("Create");
+      await createProduct(payload);
+    }
   };
 
   return {
     methods: {
       control,
+      errors,
+      register,
     },
     onSubmit: handleSubmit(onSubmit),
   };

@@ -3,7 +3,14 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useFormContext, Controller } from "react-hook-form";
 import { FormProps } from "./FormProps";
 
-export const Dropdown = ({ name, control, label, options, defaultValue }: FormProps) => {
+export const Dropdown = ({
+  name,
+  control,
+  label,
+  options,
+  defaultValue,
+  error,
+}: FormProps) => {
   const generateSingleOptions = () => {
     return options.map((option: any) => {
       return (
