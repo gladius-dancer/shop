@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useFeedbackForm } from "./hook/useFeedback";
+import { useCallbackForm } from "./hook/useCallbackForm";
 import { TimePicker } from "../FormComponents/TimePicker";
 
 function Footer() {
@@ -15,7 +15,7 @@ function Footer() {
     methods: { control },
     onSubmit,
     errors,
-  } = useFeedbackForm();
+  } = useCallbackForm();
 
   return (
     <footer className="footer_area">
@@ -92,16 +92,16 @@ function Footer() {
                 <form onSubmit={onSubmit} className="feedback-form">
                   <div className="feedback-form-top">
                     <InputText
-                      key="name"
-                      name="name"
+                      key="full_name"
+                      name="full_name"
                       control={control}
                       status={true}
                       label="Name"
                       fullWith={false}
                     />
                     <InputText
-                      key="number"
-                      name="number"
+                      key="phone_number"
+                      name="phone_number"
                       control={control}
                       status={true}
                       label="Number"
@@ -112,15 +112,19 @@ function Footer() {
                     <div className="feedback-form-top">
                       <TimePicker
                         label="Start"
-                        name="start"
+                        name="start_time"
                         control={control}
                       />
-                      <TimePicker label="End" name="end" control={control} />
+                      <TimePicker
+                        label="End"
+                        name="end_time"
+                        control={control}
+                      />
                     </div>
                   </LocalizationProvider>
                   <MultiLine
-                    key="message"
-                    name="message"
+                    key="comment"
+                    name="comment"
                     label="Message"
                     control={control}
                   />

@@ -1,10 +1,10 @@
 import React from "react";
-import { InputText } from "../../../FormComponents/InputText";
-import { MultiLine } from "../../../FormComponents/MultiLine";
-import { Dropdown } from "../../../FormComponents/Dropdown";
+import { InputText } from "../../FormComponents/InputText";
+import { MultiLine } from "../../FormComponents/MultiLine";
+import { Dropdown } from "../../FormComponents/Dropdown";
 import { Button, FormHelperText } from "@mui/material";
-import ModalComponent from "../../../Modal/ModalComponent";
-import { useProductModalForm } from "./hooks/useProductModalForm";
+import ModalComponent from "../../Modal/ModalComponent";
+import { useProductModalForm } from "../hooks/useProductModalForm";
 
 type Props = {
   data?: any;
@@ -13,7 +13,7 @@ type Props = {
 
 export function ProductModal({ categories, data }: Props) {
   const {
-    methods: { control, errors, register },
+    methods: { control, errors },
     onSubmit,
   } = useProductModalForm(data);
 
@@ -21,19 +21,8 @@ export function ProductModal({ categories, data }: Props) {
     <ModalComponent>
       <div className="add-modal">
         <form onSubmit={onSubmit} className="add-form">
-          <InputText
-            status={true}
-            register={register}
-            name="name"
-            label="Name"
-            control={control}
-          />
-          <MultiLine
-            register={register}
-            name="description"
-            label="Description"
-            control={control}
-          />
+          <InputText status={true} name="name" label="Name" control={control} />
+          <MultiLine name="description" label="Description" control={control} />
           <InputText
             status={true}
             name="price"
@@ -46,14 +35,12 @@ export function ProductModal({ categories, data }: Props) {
               name="quantity"
               label="Count"
               control={control}
-              register={register}
             />
             <InputText
               status={true}
               name="discount"
               label="Discount"
               control={control}
-              register={register}
             />
           </div>
           <Dropdown
@@ -61,7 +48,6 @@ export function ProductModal({ categories, data }: Props) {
             name="category"
             control={control}
             options={categories}
-            register={register}
           />
           {errors.category && (
             <FormHelperText error>{errors.category.message}</FormHelperText>
@@ -71,7 +57,6 @@ export function ProductModal({ categories, data }: Props) {
             name="images"
             label="Image link"
             control={control}
-            register={register}
           />
           <Button type="submit" variant="contained">
             Add

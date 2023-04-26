@@ -1,14 +1,9 @@
 import { AppDispatch } from "../store";
 import axios from "axios";
 import { authSlice } from "./AuthSlice.ts";
-import { categoriesSlice } from "./CategorySlice.ts";
-import { productsSlice } from "./ProductsSlice";
-import { LoginType } from "../../types/LoginType";
-import { FeedbackType } from "../../types/FeedbackType";
-import { ordersSlice } from "./OrdersSlice";
+import { LoginType } from "../../models/LoginType";
 import { Notification } from "../../utils/notification";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ProductType} from "../../types/ProductType";
+import { categoriesSlice } from "./CategorySlice";
 
 const notify = new Notification();
 
@@ -40,27 +35,6 @@ export const login = (data: LoginType) => async (dispatch: AppDispatch) => {
   }
 };
 
-export const sendFeedback =
-  (data: FeedbackType) => async (dispatch: AppDispatch) => {
-    try {
-      const response = await $api.post(
-        "https://ecommerce.icedev.uz/call_orders",
-        {
-          full_name: data.name,
-          phone_number: data.number,
-          start_time: new Date(data.start).toLocaleTimeString(),
-          end_time: new Date(data.end).toLocaleTimeString(),
-          comment: data.message,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (e: any) {}
-  };
-
 export const getCategories = () => async (dispatch: AppDispatch) => {
   try {
     const response = await $api.get("https://ecommerce.icedev.uz/categories");
@@ -71,15 +45,3 @@ export const getCategories = () => async (dispatch: AppDispatch) => {
     );
   } catch (e) {}
 };
-
-
-
-export const getOrders = () => async (dispatch: AppDispatch) => {
-  try {
-    const response = await $api.get("https://ecommerce.icedev.uz/orders");
-    dispatch(ordersSlice.actions.getOrders(response.data));
-  } catch (e) {}
-};
-
-
-

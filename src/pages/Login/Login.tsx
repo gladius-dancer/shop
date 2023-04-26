@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
-import images from "../../../assets";
-import { InputText } from "../../../components/FormComponents/InputText";
+import images from "../../assets";
+import { InputText } from "../../components/FormComponents/InputText";
 import "react-toastify/scss/main.scss";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { useLoginForm } from "./hooks/useLoginForm";
-import { useIsAuthorized } from "../../../hooks/useIsAuthorized";
-import { Notification } from "../../../utils/notification";
+import { useIsAuthorized } from "../../hooks/useIsAuthorized";
+import { Notification } from "../../utils/notification";
 
 function Login() {
-
   const {
     methods: { control },
     onSubmit,
@@ -78,13 +77,13 @@ function Login() {
           <div className="row">
             <div className="col-12">
               <div className="footer_social_area text-center">
-                <a href="src/shop/pages/Login/Login#">
+                <a href="src/pages/Login/Login#">
                   <i className="fa fa-facebook" aria-hidden="true"></i>
                 </a>
-                <a href="src/shop/pages/Login/Login#">
+                <a href="src/pages/Login/Login#">
                   <i className="fa fa-twitter" aria-hidden="true"></i>
                 </a>
-                <a href="src/shop/pages/Login/Login#">
+                <a href="src/pages/Login/Login#">
                   <i className="fa fa-linkedin" aria-hidden="true"></i>
                 </a>
               </div>

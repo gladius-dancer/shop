@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
-import { ProductType } from "../types/ProductType";
-import { ProductSendType } from "../types/ProductSendType";
+import { ProductType } from "../models/ProductType";
+import { ProductSendType } from "../models/ProductSendType";
 
 export const productAPI = createApi({
   reducerPath: "productAPI",
@@ -50,7 +50,7 @@ export const productAPI = createApi({
         return {
           url: `/products/${id}`,
           method: "PUT",
-          body: product,
+          body: product.product,
           headers: {
             "Content-type": "application/json",
           },

@@ -5,7 +5,6 @@ import { FormProps } from "./FormProps";
 
 export const InputText = ({
   name,
-  register,
   label,
   control,
   status,
@@ -19,7 +18,6 @@ export const InputText = ({
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
           helperText={error ? error.message : null}
-          {...register(name)}
           label={label}
           error={!!error}
           onChange={onChange}

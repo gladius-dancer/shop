@@ -1,7 +1,7 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
-import { ProductType } from "../../types/ProductType";
+import { ProductType } from "../../models/ProductType";
 import "./ProductList.scss";
 
 type Props = {
@@ -45,8 +45,10 @@ function ProductList({
               <div className="product-description">
                 <h4 className="product-price">${item.price}</h4>
                 <div className="d-flex">
-                  <p >{item.name}</p>
-                  <div className="like"><i className="ti-heart"></i></div>
+                  <p>{item.name}</p>
+                  <div className="like">
+                    <i className="ti-heart"></i>
+                  </div>
                 </div>
                 {/* Add to Cart */}
                 <p

@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useEffect } from "react";
-import Footer from "../../../components/Footer/Footer";
-import Header from "../../../components/Header/Header";
-import Categories from "../../../components/Categories/Categories";
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
+import Categories from "../../components/Categories/Categories";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../hooks/useRedux";
-import { update } from "../../../store/reducers/CartSlice";
-import { setPrice } from "../../../store/reducers/PriceSlice";
-import { setShipping } from "../../../store/reducers/ShippingSlice";
-import { CartType } from "../../../types/CartType";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
+import { update } from "../../store/reducers/CartSlice";
+import { setPrice } from "../../store/reducers/PriceSlice";
+import { setShipping } from "../../store/reducers/ShippingSlice";
+import { CartType } from "../../models/CartType";
 
 function Cart() {
   const dispatch = useAppDispatch();
@@ -118,7 +118,7 @@ function Cart() {
                         {cart.map((item: any) => (
                           <tr key={item.id}>
                             <td className="cart_product_img d-flex align-items-center">
-                              <a href="#">
+                              <a href="src/pages/Cart/Cart#">
                                 <img
                                   src={item.images[0].image_path}
                                   alt="ProductType"
@@ -206,7 +206,7 @@ function Cart() {
                       <h5>Cupon code</h5>
                       <p>Enter your cupone code</p>
                     </div>
-                    <form action="#">
+                    <form action="src/pages/Cart/Cart#">
                       <input type="search" name="search" placeholder="" />
                       <button type="submit">Apply</button>
                     </form>
@@ -300,7 +300,10 @@ function Cart() {
                         </span>
                         <span>
                           <strong>
-                            $ {parseFloat(price + shippings[shippings.current]).toFixed(2)}
+                            ${" "}
+                            {parseFloat(
+                              price + shippings[shippings.current]
+                            ).toFixed(2)}
                           </strong>
                         </span>
                       </li>

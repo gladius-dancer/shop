@@ -1,10 +1,13 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { ProductType } from "../../../../../types/ProductType";
+import { ProductType } from "../../../models/ProductType";
 import * as yup from "yup";
-import { productAPI } from "../../../../../services/ProductServices";
-import { ProductSendType } from "../../../../../types/ProductSendType";
+import { productAPI } from "../../../services/ProductServices";
+import { ProductSendType } from "../../../models/ProductSendType";
+import { Notification } from "../../../utils/notification";
+import { useAppDispatch } from "../../../hooks/useRedux";
 
+let notify = new Notification();
 const schema = yup.object().shape({
   name: yup.string().required(),
   description: yup.string().required(),
@@ -18,6 +21,7 @@ const schema = yup.object().shape({
 export function useProductModalForm(data) {
   const [createProduct, {}] = productAPI.useCreateProductMutation();
   const [updateProduct, {}] = productAPI.useUpdateProductMutation();
+  const dispatch = useAppDispatch();
 
   const {
     handleSubmit,
@@ -51,10 +55,11 @@ export function useProductModalForm(data) {
     };
     if (Object.keys(data).length !== 0) {
       console.log("Update");
-      updateProduct({ id: data.id, product: payload });
+      await updateProduct({ id: data.id, product: payload });
     } else {
       console.log("Create");
       await createProduct(payload);
+      notify.showSuccess("Product added successfully!");
     }
   };
 

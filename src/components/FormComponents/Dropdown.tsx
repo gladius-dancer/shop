@@ -9,7 +9,6 @@ export const Dropdown = ({
   label,
   options,
   defaultValue,
-  error,
 }: FormProps) => {
   const generateSingleOptions = () => {
     return options.map((option: any) => {

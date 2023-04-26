@@ -2,9 +2,9 @@ import React, { useCallback, useEffect } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { LoginType } from "../../../../types/LoginType";
-import { login } from "../../../../store/reducers/AsyncActions";
-import { useAppDispatch } from "../../../../hooks/useRedux";
+import { LoginType } from "../../../models/LoginType";
+import { login } from "../../../store/reducers/AsyncActions";
+import { useAppDispatch } from "../../../hooks/useRedux";
 
 type FormData = LoginType;
 

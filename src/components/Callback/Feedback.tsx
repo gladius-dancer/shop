@@ -11,23 +11,20 @@ import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditAttributesIcon from "@mui/icons-material/EditAttributes";
-import "./Products.scss";
 import IconButton from "@mui/material/IconButton";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import useProducts from "./hooks/useProducts";
-import { ProductModal } from "./modules/ProductModal";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { change } from "../../store/reducers/ModalSlice";
+import useFeedback from "./hooks/useFeedback";
 
-export default function Products() {
-  const { columns, filteredProducts, deleteProduct, categories, handleSearch } =
-    useProducts();
-
+export default function Feedback() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const dispatch = useAppDispatch();
   const modal = useAppSelector((state) => state.modalReducer);
+
+  const { columns, callbacks, handleSearch, handleDelete } = useFeedback();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -40,32 +37,9 @@ export default function Products() {
     setPage(0);
   };
 
-  const handleDelete = async (id) => {
-    await deleteProduct(id);
-  };
-
-  function openCreateModal(item) {
-    dispatch(change());
-    setSelectedProduct({ data: {} });
-  }
-
-  function openUpdateModal(item) {
-    dispatch(change());
-    setSelectedProduct({ data: item });
-  }
-
-  const [selectedProduct, setSelectedProduct] = useState<{
-    data?: any;
-  }>({
-    data: null,
-  });
-
   return (
     <>
       <div className="products-top">
-        <Button onClick={() => openCreateModal({})} variant="contained">
-          Create product
-        </Button>
         <div className="product-search">
           <span>Search: </span>{" "}
           <TextField onChange={handleSearch} size="small" variant="outlined" />
@@ -89,24 +63,13 @@ export default function Products() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredProducts?.map((item) => (
+              {callbacks?.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="product-image">
-                    <img src={item.images[0].image_path} alt="" />
-                  </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell>{item.category.name}</TableCell>
-                  <TableCell>{item.price}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>{item.discount}</TableCell>
+                  <TableCell>{item.full_name}</TableCell>
+                  <TableCell>{item.phone_number}</TableCell>
+                  <TableCell>{`${item.start_time} - ${item.end_time}`}</TableCell>
+                  <TableCell>{item.comment}</TableCell>
                   <TableCell className="actions">
-                    <IconButton>
-                      <EditAttributesIcon color="primary" />
-                    </IconButton>
-                    <IconButton onClick={() => openUpdateModal(item)}>
-                      <SettingsIcon />
-                    </IconButton>
                     <IconButton onClick={() => handleDelete(item.id)}>
                       <DeleteIcon color="error" />
                     </IconButton>
@@ -126,10 +89,6 @@ export default function Products() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-
-      {modal && (
-        <ProductModal data={selectedProduct.data} categories={categories} />
-      )}
     </>
   );
 }

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ProductType } from "../../types/ProductType";
+import { ProductType } from "../../models/ProductType";
 
 interface ProductsSlice {
-  isLoading: boolean,
-  error: string
-  products: ProductType[]
+  isLoading: boolean;
+  error: string;
+  products: ProductType[];
 }
 
 const initialState: ProductsSlice = {
@@ -16,7 +16,7 @@ const initialState: ProductsSlice = {
 export const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {}
+  reducers: {},
 });
 
 export default productsSlice.reducer;
