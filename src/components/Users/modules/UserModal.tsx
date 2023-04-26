@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InputText } from "../../FormComponents/InputText";
 import { Dropdown } from "../../FormComponents/Dropdown";
+import { InputCheckbox } from "../../FormComponents/Checkbox";
 import { Button, FormHelperText } from "@mui/material";
 import ModalComponent from "../../Modal/ModalComponent";
 import { useUserModal } from "../hooks/useUserModal";
 import "../Users.scss";
 
+const numberType = [
+  { value: "Mobile", label: "Mobile" },
+  { value: "Home", label: "Home" },
+];
+
 type Props = {
   data?: any;
-  country: number[];
+  country: any;
 };
 
 export function UserModal({ country, data }: Props) {
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const {
     methods: { control, errors },
     onSubmit,
@@ -23,12 +31,20 @@ export function UserModal({ country, data }: Props) {
         <form onSubmit={onSubmit} className="add-form">
           <div className="add-form-inner">
             <div className="add-form-left">
-              <InputText
-                status={true}
-                name="username"
-                label="Username"
-                control={control}
-              />
+              <div className="add-form-right-username">
+                <InputText
+                  status={true}
+                  name="username"
+                  label="Username"
+                  control={control}
+                />
+                <InputCheckbox
+                  name="isAdmin"
+                  control={control}
+                  label="Is admin"
+                  onChange={() => setIsAdmin(!isAdmin)}
+                />
+              </div>
               <InputText
                 status={true}
                 name="password"
@@ -62,16 +78,20 @@ export function UserModal({ country, data }: Props) {
                   label="Phone number"
                   control={control}
                 />
-                <InputText
-                  status={true}
+                <Dropdown
+                  key="type"
                   name="type"
-                  label="Type of number"
                   control={control}
+                  label="Type of number"
+                  options={numberType}
                 />
+                {errors.type && (
+                  <FormHelperText error>{errors.type.message}</FormHelperText>
+                )}
               </div>
               <InputText
                 status={true}
-                name="street_address"
+                name="street_adress"
                 label="Street"
                 control={control}
               />
@@ -92,6 +112,7 @@ export function UserModal({ country, data }: Props) {
                 name="country_id"
                 control={control}
                 options={country}
+                label="Country"
               />
               {errors.country && (
                 <FormHelperText error>

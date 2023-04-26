@@ -5,6 +5,8 @@ import { Notification } from "../../../utils/notification";
 import { useAppDispatch } from "../../../hooks/useRedux";
 import { userAPI } from "../../../services/UserServices";
 import { UserType, UserSendType } from "../../../models/UserType";
+import { countryAPI } from "../../../services/CountryServices";
+import { categoryAPI } from "../../../services/CategoryServices";
 
 let notify = new Notification();
 const schema = yup.object().shape({
@@ -16,14 +18,13 @@ const schema = yup.object().shape({
   phone_number: yup.string().required(),
   type: yup.string().required(),
   street_adress: yup.string().required(),
-  postal_code: yup.number().required(),
+  postal_code: yup.string().required(),
   country_id: yup.number().required(),
 });
 
 export function useUserModal(data) {
   const [createUser, {}] = userAPI.useCreateUserMutation();
   const [updateUser, {}] = userAPI.useUpdateUserMutation();
-  const dispatch = useAppDispatch();
 
   const {
     handleSubmit,
@@ -32,14 +33,16 @@ export function useUserModal(data) {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      ...data,
-      category: data?.category?.id,
-      images: data?.images?.[0]?.image_path,
-    },
+    // defaultValues: {
+    //   ...data,
+    //   category: data?.category?.id,
+    //   images: data?.images?.[0]?.image_path,
+    // },
   });
 
   const onSubmit = async (formData) => {
+    console.log(formData);
+
     let payload: UserSendType = {
       user: {
         username: formData.username,

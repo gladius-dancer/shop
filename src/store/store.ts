@@ -12,6 +12,7 @@ import { productAPI } from "../services/ProductServices";
 import { categoryAPI } from "../services/CategoryServices";
 import { callbackAPI } from "../services/CallbackServices";
 import { userAPI } from "../services/UserServices";
+import { countryAPI } from "../services/CountryServices";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   [categoryAPI.reducerPath]: categoryAPI.reducer,
   [callbackAPI.reducerPath]: callbackAPI.reducer,
   [userAPI.reducerPath]: userAPI.reducer,
+  [countryAPI.reducerPath]: countryAPI.reducer,
 });
 
 export const setupStore = () => {
@@ -37,7 +39,8 @@ export const setupStore = () => {
         .concat(productAPI.middleware)
         .concat(categoryAPI.middleware)
         .concat(callbackAPI.middleware)
-        .concat(userAPI.middleware),
+        .concat(userAPI.middleware)
+        .concat(countryAPI.middleware),
   });
 };
 

@@ -21,7 +21,6 @@ const schema = yup.object().shape({
 export function useProductModalForm(data) {
   const [createProduct, {}] = productAPI.useCreateProductMutation();
   const [updateProduct, {}] = productAPI.useUpdateProductMutation();
-  const dispatch = useAppDispatch();
 
   const {
     handleSubmit,

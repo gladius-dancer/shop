@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 300px;
+  width: 360px;
 
 }
 
@@ -24,7 +24,12 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 300px;
+  width: 360px;
+}
+
+.add-form-right-username{
+  display: flex;
+  gap: 20px;
 }
 
 .add-form-right-phone{

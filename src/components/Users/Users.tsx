@@ -18,14 +18,22 @@ import { change } from "../../store/reducers/ModalSlice";
 import useUsers from "./hooks/useUsers";
 import "./Users.scss";
 import { UserModal } from "./modules/UserModal";
+import { countryAPI } from "../../services/CountryServices";
 
 export default function Users() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const dispatch = useAppDispatch();
   const modal = useAppSelector((state) => state.modalReducer);
-
+  const { data: country } = countryAPI.useFetchAllCountryQuery("");
   const { columns, filteredUsers, handleSearch, handleDelete } = useUsers();
+
+  const country_list = country?.map((item) => {
+    return {
+      value: item.id,
+      label: item.country_name,
+    };
+  });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -118,7 +126,7 @@ export default function Users() {
         />
       </Paper>
 
-      {modal && <UserModal country={[1, 2]} data={selectedUser.data} />}
+      {modal && <UserModal country={country_list} data={selectedUser.data} />}
     </>
   );
 }

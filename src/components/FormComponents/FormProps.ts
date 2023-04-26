@@ -6,7 +6,7 @@ export interface FormProps {
   value?: any | undefined;
   checked?: boolean;
   label?: string;
-  errors?: any;
+  error?: any;
   onChange?: any;
   options?: any;
   size?: string;
