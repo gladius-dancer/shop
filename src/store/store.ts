@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./reducers/AuthSlice";
 import navReducer from "./reducers/NavSlice";
 import modalReducer from "./reducers/ModalSlice";
-import categoriesReduser from "./reducers/CategorySlice";
 import cartReduser from "./reducers/CartSlice";
 import priceReduser from "./reducers/PriceSlice";
 import favoriteReduser from "./reducers/FavoriteSlice";
@@ -18,7 +17,6 @@ const rootReducer = combineReducers({
   authReducer,
   navReducer,
   modalReducer,
-  categoriesReduser,
   cartReduser,
   priceReduser,
   favoriteReduser,

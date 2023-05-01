@@ -34,10 +34,21 @@ export const userAPI = createApi({
       }),
       invalidatesTags: ["Users"],
     }),
+    createAdminUser: build.mutation<UserSendType, UserSendType>({
+      query: (user) => ({
+        url: "/users/admin",
+        method: "POST",
+        body: user,
+        headers: {
+          "Content-type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Users"],
+    }),
 
     deleteUser: build.mutation<string, string>({
       query: (id) => ({
-        url: `/products/${id}`,
+        url: `/users/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Users"],
@@ -49,7 +60,7 @@ export const userAPI = createApi({
         return {
           url: `/users/${id}`,
           method: "PUT",
-          body: user.user,
+          body: user,
           headers: {
             "Content-type": "application/json",
           },

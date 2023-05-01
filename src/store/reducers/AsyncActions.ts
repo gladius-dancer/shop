@@ -3,7 +3,6 @@ import axios from "axios";
 import { authSlice } from "./AuthSlice.ts";
 import { LoginType } from "../../models/LoginType";
 import { Notification } from "../../utils/notification";
-import { categoriesSlice } from "./CategorySlice";
 
 const notify = new Notification();
 
@@ -33,15 +32,4 @@ export const login = (data: LoginType) => async (dispatch: AppDispatch) => {
   } catch (e: any) {
     dispatch(authSlice.actions.loginError(e.message));
   }
-};
-
-export const getCategories = () => async (dispatch: AppDispatch) => {
-  try {
-    const response = await $api.get("https://ecommerce.icedev.uz/categories");
-    dispatch(
-      categoriesSlice.actions.setCategories(
-        response.data.filter((item) => item.children_category.length > 0)
-      )
-    );
-  } catch (e) {}
 };

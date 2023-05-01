@@ -53,10 +53,10 @@ export function useProductModalForm(data) {
       ],
     };
     if (Object.keys(data).length !== 0) {
-      console.log("Update");
+      // console.log("Update");
       await updateProduct({ id: data.id, product: payload });
     } else {
-      console.log("Create");
+      // console.log("Create");
       await createProduct(payload);
       notify.showSuccess("Product added successfully!");
     }

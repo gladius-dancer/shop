@@ -47,7 +47,7 @@ export type UserSendType = {
   ];
   user_address: {
     street_address: string;
-    postal_code: number;
+    postal_code: string;
     city: string;
     country_id: number;
   };

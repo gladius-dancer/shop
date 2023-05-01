@@ -9,20 +9,12 @@ import { useState } from "react";
 let notify = new Notification();
 const schema = yup.object().shape({
   username: yup.string().required(),
-  password: yup.string().required().min(4),
   first_name: yup.string().required(),
   last_name: yup.string().required(),
   user_image: yup.string().required(),
-  phone_number: yup.string().required(),
-  type: yup.string().required(),
-  street_adress: yup.string().required(),
-  postal_code: yup.string().required(),
-  country_id: yup.number().required(),
 });
 
-export function useUserModal(data) {
-  const [createUser, {}] = userAPI.useCreateUserMutation();
-  const [createAdminUser, {}] = userAPI.useCreateAdminUserMutation();
+export function useUserUpdateModal(data) {
   const [updateUser, {}] = userAPI.useUpdateUserMutation();
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -33,45 +25,26 @@ export function useUserModal(data) {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      first_name: data.user_detail.first_name,
+      last_name: data.user_detail.last_name,
+      user_image: data.user_detail.user_image,
+      username: data.username,
+    },
   });
   const onSubmit = async (formData) => {
-    let payload: UserSendType = {
+    let payload = {
       user: {
         username: formData.username,
-        password: formData.password,
       },
       user_detail: {
         first_name: formData.first_name,
         last_name: formData.last_name,
         user_image: formData.user_image,
       },
-      user_phones: [
-        {
-          phone_number: formData.phone_number,
-          type: formData.type,
-        },
-      ],
-      user_address: {
-        street_address: formData.street_adress,
-        postal_code: formData.postal_code,
-        city: formData.city,
-        country_id: formData.country_id,
-      },
     };
 
-    if (Object.keys(data).length !== 0) {
-      // console.log("Update");
-      await updateUser({ id: data.id, user: payload });
-    } else {
-      // console.log("Create");
-      if (isAdmin) {
-        await createAdminUser(payload);
-        notify.showSuccess("User added successfully!");
-      } else {
-        await createUser(payload);
-        notify.showSuccess("User added successfully!");
-      }
-    }
+    await updateUser({ id: data.id, user: payload });
   };
 
   return {

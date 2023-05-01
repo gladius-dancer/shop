@@ -18,11 +18,10 @@ type Props = {
 };
 
 export function UserModal({ country, data }: Props) {
-  const [isAdmin, setIsAdmin] = useState(false);
-
   const {
     methods: { control, errors },
     onSubmit,
+    setIsAdmin,
   } = useUserModal(data);
 
   return (
@@ -42,7 +41,7 @@ export function UserModal({ country, data }: Props) {
                   name="isAdmin"
                   control={control}
                   label="Is admin"
-                  onChange={() => setIsAdmin(!isAdmin)}
+                  onChange={setIsAdmin}
                 />
               </div>
               <InputText
@@ -115,9 +114,7 @@ export function UserModal({ country, data }: Props) {
                 label="Country"
               />
               {errors.country && (
-                <FormHelperText error>
-                  {errors.country_id.message}
-                </FormHelperText>
+                <FormHelperText error>{!!errors}</FormHelperText>
               )}
             </div>
           </div>

@@ -22,12 +22,13 @@ import { change } from "../../store/reducers/ModalSlice";
 function Main() {
   const dispatch = useAppDispatch();
   const nav = useAppSelector((state) => state.navReducer);
-  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const isAuth = useIsAuthorized();
   const [currentProduct, setSetCurrentProduct] = useState<any>({});
   const cart = useAppSelector((state) => state.cartReduser.cart);
   let notify = new Notification();
+
+  const modal = useAppSelector((state) => state.modalReducer);
 
   const {
     data: products,
@@ -57,8 +58,9 @@ function Main() {
             )
           )
         : dispatch(add({ ...product, count: 1, totalPrice: product.price }));
-      setModal(false);
+      dispatch(() => change());
     } else {
+      dispatch(() => change());
       return navigate("/login");
     }
   };
@@ -123,7 +125,6 @@ function Main() {
           title={currentProduct.name}
           price={currentProduct.price}
           description={currentProduct.description}
-          setModal={setModal}
           addToCart={addToCart}
           link="/details"
         />

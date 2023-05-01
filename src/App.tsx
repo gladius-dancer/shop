@@ -6,7 +6,6 @@ import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
 import { useEffect } from "react";
 import { useAppDispatch } from "./hooks/useRedux";
-import { getCategories } from "./store/reducers/AsyncActions";
 import Panel from "./pages/admin/Panel";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Orders from "./components/Orders/Orders";
@@ -26,7 +25,6 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { isLoading } = productAPI.useFetchAllProductsQuery("");
   useEffect(() => {
-    dispatch(getCategories());
     JSON.parse(localStorage.getItem("authStatus")) === "true"
       ? dispatch(authSlice.actions.loginSuccess(true))
       : dispatch(authSlice.actions.loginSuccess(false));

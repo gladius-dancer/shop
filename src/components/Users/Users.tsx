@@ -19,10 +19,17 @@ import useUsers from "./hooks/useUsers";
 import "./Users.scss";
 import { UserModal } from "./modules/UserModal";
 import { countryAPI } from "../../services/CountryServices";
+import { UserUpdateModal } from "./modules/UserUpdateModal";
 
 export default function Users() {
   const [page, setPage] = useState(0);
+  const [selectedUser, setSelectedUser] = useState<{
+    data?: any;
+  }>({
+    data: null,
+  });
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [update, setUpdate] = useState(false);
   const dispatch = useAppDispatch();
   const modal = useAppSelector((state) => state.modalReducer);
   const { data: country } = countryAPI.useFetchAllCountryQuery("");
@@ -53,14 +60,9 @@ export default function Users() {
 
   function openUpdateModal(item) {
     dispatch(change());
+    setUpdate(true);
     setSelectedUser({ data: item });
   }
-
-  const [selectedUser, setSelectedUser] = useState<{
-    data?: any;
-  }>({
-    data: null,
-  });
 
   return (
     <>
@@ -126,7 +128,10 @@ export default function Users() {
         />
       </Paper>
 
-      {modal && <UserModal country={country_list} data={selectedUser.data} />}
+      {modal && !update && (
+        <UserModal country={country_list} data={selectedUser.data} />
+      )}
+      {modal && update && <UserUpdateModal data={selectedUser.data} />}
     </>
   );
 }

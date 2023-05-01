@@ -9,7 +9,6 @@ type CurrentProductType = {
   price: number;
   description: string;
   link: string;
-  setModal: any;
   addToCart: any;
 };
 
