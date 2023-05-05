@@ -1,7 +1,8 @@
 import * as React from "react";
 import { productAPI } from "../../../services/ProductServices";
 import { categoryAPI } from "../../../services/CategoryServices";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Notification } from "../../../utils/notification";
 
 export default function useProducts() {
   interface Column {
@@ -61,12 +62,8 @@ export default function useProducts() {
     },
   ];
 
-  const {
-    data: products,
-    error,
-    status,
-  } = productAPI.useFetchAllProductsQuery("");
-  const [deleteProduct, {}] = productAPI.useDeleteProductMutation();
+  const { data: products } = productAPI.useFetchAllProductsQuery("");
+  const [deleteProduct, deleteStatus] = productAPI.useDeleteProductMutation();
   const { data: category } = categoryAPI.useFetchAllCategoriesQuery("");
   const categories = category?.reduce((acc: any, item: any) => {
     acc.push({ label: item.name, value: item.id });
@@ -82,6 +79,14 @@ export default function useProducts() {
   const handleSearch = (event) => {
     setQuery(event.target.value);
   };
+
+  useEffect(() => {
+    if (deleteStatus.isSuccess) {
+      new Notification().showSuccess("Product successfully deleted!");
+    } else if (deleteStatus.isError) {
+      new Notification().showError("Product not deleted!");
+    }
+  }, [deleteStatus]);
 
   return {
     columns,

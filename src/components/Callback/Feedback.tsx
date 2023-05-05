@@ -9,22 +9,15 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SettingsIcon from "@mui/icons-material/Settings";
-import EditAttributesIcon from "@mui/icons-material/EditAttributes";
 import IconButton from "@mui/material/IconButton";
-import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
-import { change } from "../../store/reducers/ModalSlice";
 import useFeedback from "./hooks/useFeedback";
 
 export default function Feedback() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const dispatch = useAppDispatch();
-  const modal = useAppSelector((state) => state.modalReducer);
-
-  const { columns, callbacks, handleSearch, handleDelete } = useFeedback();
+  const { columns, filteredCallbacks, handleSearch, handleDelete } =
+    useFeedback();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -63,7 +56,7 @@ export default function Feedback() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {callbacks?.map((item) => (
+              {filteredCallbacks?.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.full_name}</TableCell>
                   <TableCell>{item.phone_number}</TableCell>

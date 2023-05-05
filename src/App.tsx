@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
 import { useEffect } from "react";
-import { useAppDispatch } from "./hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "./hooks/useRedux";
 import Panel from "./pages/admin/Panel";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Orders from "./components/Orders/Orders";
@@ -23,12 +23,12 @@ Modal.setAppElement("#root");
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { isLoading } = productAPI.useFetchAllProductsQuery("");
-  useEffect(() => {
-    JSON.parse(localStorage.getItem("authStatus")) === "true"
-      ? dispatch(authSlice.actions.loginSuccess(true))
-      : dispatch(authSlice.actions.loginSuccess(false));
-  }, []);
+  const loading = useAppSelector((state) => state.loadReduser);
+  // useEffect(() => {
+  //   JSON.parse(localStorage.getItem("authStatus")) === "true"
+  //     ? dispatch(authSlice.actions.loginSuccess(true))
+  //     : dispatch(authSlice.actions.loginSuccess(false));
+  // }, []);
 
   return (
     <>
@@ -50,7 +50,7 @@ const App = () => {
           <Route path="*" element={<h2>Route not found</h2>} />
         </Routes>
       </BrowserRouter>
-      {isLoading && <Loader />}
+      {loading && <Loader />}
     </>
   );
 };

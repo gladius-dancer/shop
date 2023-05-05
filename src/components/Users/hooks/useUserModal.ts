@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { Notification } from "../../../utils/notification";
 import { userAPI } from "../../../services/UserServices";
 import { UserSendType } from "../../../models/UserType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 let notify = new Notification();
 const schema = yup.object().shape({
@@ -21,20 +21,19 @@ const schema = yup.object().shape({
 });
 
 export function useUserModal(data) {
-  const [createUser, {}] = userAPI.useCreateUserMutation();
-  const [createAdminUser, {}] = userAPI.useCreateAdminUserMutation();
-  const [updateUser, {}] = userAPI.useUpdateUserMutation();
+  const [createUser, createStatus] = userAPI.useCreateUserMutation();
+  const [createAdminUser, createAdminStatus] =
+    userAPI.useCreateAdminUserMutation();
   const [isAdmin, setIsAdmin] = useState(false);
 
   const {
     handleSubmit,
     control,
-    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = async (formData) => {
+  const onSubmit = (formData) => {
     let payload: UserSendType = {
       user: {
         username: formData.username,
@@ -59,26 +58,31 @@ export function useUserModal(data) {
       },
     };
 
-    if (Object.keys(data).length !== 0) {
-      // console.log("Update");
-      await updateUser({ id: data.id, user: payload });
+    if (isAdmin) {
+      createAdminUser(payload);
     } else {
-      // console.log("Create");
-      if (isAdmin) {
-        await createAdminUser(payload);
-        notify.showSuccess("User added successfully!");
-      } else {
-        await createUser(payload);
-        notify.showSuccess("User added successfully!");
-      }
+      createUser(payload);
     }
   };
+
+  useEffect(() => {
+    if (createStatus.isSuccess) {
+      new Notification().showSuccess("User successfully created!");
+    } else if (createStatus.isError) {
+      new Notification().showError("User not created!");
+    }
+
+    if (createAdminStatus.isSuccess) {
+      new Notification().showSuccess("Admin user successfully created!");
+    } else if (createAdminStatus.isError) {
+      new Notification().showError("Admin user not created!");
+    }
+  }, [createStatus, createAdminStatus]);
 
   return {
     methods: {
       control,
       errors,
-      register,
     },
     onSubmit: handleSubmit(onSubmit),
     setIsAdmin: () => setIsAdmin(!isAdmin),

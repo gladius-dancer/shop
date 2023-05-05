@@ -9,7 +9,7 @@ import { Notification } from "../../../utils/notification";
 type FormData = CallbackType;
 
 export function useCallbackForm() {
-  const [createCallback, { isSuccess }] =
+  const [createCallback, createStatus] =
     callbackAPI.useCreateCallbackMutation();
 
   const schema = yup.object().shape({
@@ -41,10 +41,12 @@ export function useCallbackForm() {
   }, []);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (createStatus.isSuccess) {
       new Notification().showSuccess("Feedback successfully sended!");
+    } else if (createStatus.isError) {
+      new Notification().showSuccess("Feedback not sended!");
     }
-  });
+  }, [createStatus]);
 
   return {
     methods: {

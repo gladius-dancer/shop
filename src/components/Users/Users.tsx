@@ -14,12 +14,15 @@ import IconButton from "@mui/material/IconButton";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
-import { change } from "../../store/reducers/ModalSlice";
+import { showModal } from "../../store/reducers/ModalSlice";
 import useUsers from "./hooks/useUsers";
 import "./Users.scss";
 import { UserModal } from "./modules/UserModal";
 import { countryAPI } from "../../services/CountryServices";
 import { UserUpdateModal } from "./modules/UserUpdateModal";
+import { userAPI } from "../../services/UserServices";
+import { hideLoader, showLoader } from "../../store/reducers/LoadSlice";
+import { Notification } from "../../utils/notification";
 
 export default function Users() {
   const [page, setPage] = useState(0);
@@ -34,6 +37,16 @@ export default function Users() {
   const modal = useAppSelector((state) => state.modalReducer);
   const { data: country } = countryAPI.useFetchAllCountryQuery("");
   const { columns, filteredUsers, handleSearch, handleDelete } = useUsers();
+
+  const fetchUsers = userAPI.endpoints.fetchAllUsers.useQuery("");
+
+  if (fetchUsers.isLoading) {
+    dispatch(showLoader());
+  } else if (fetchUsers.isError) {
+    new Notification().showError("Load error!");
+  } else if (fetchUsers.isSuccess) {
+    dispatch(hideLoader());
+  }
 
   const country_list = country?.map((item) => {
     return {
@@ -54,12 +67,12 @@ export default function Users() {
   };
 
   function openUserModal(item) {
-    dispatch(change());
+    dispatch(showModal());
     setSelectedUser({ data: {} });
   }
 
   function openUpdateModal(item) {
-    dispatch(change());
+    dispatch(showModal());
     setUpdate(true);
     setSelectedUser({ data: item });
   }

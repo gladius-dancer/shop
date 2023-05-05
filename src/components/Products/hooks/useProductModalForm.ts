@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { productAPI } from "../../../services/ProductServices";
 import { ProductSendType } from "../../../models/ProductSendType";
 import { Notification } from "../../../utils/notification";
-import { useAppDispatch } from "../../../hooks/useRedux";
+import { useEffect } from "react";
 
 let notify = new Notification();
 const schema = yup.object().shape({
@@ -19,13 +19,12 @@ const schema = yup.object().shape({
 });
 
 export function useProductModalForm(data) {
-  const [createProduct, {}] = productAPI.useCreateProductMutation();
-  const [updateProduct, {}] = productAPI.useUpdateProductMutation();
+  const [createProduct, createStatus] = productAPI.useCreateProductMutation();
+  const [updateProduct, updateStatus] = productAPI.useUpdateProductMutation();
 
   const {
     handleSubmit,
     control,
-    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -53,20 +52,31 @@ export function useProductModalForm(data) {
       ],
     };
     if (Object.keys(data).length !== 0) {
-      // console.log("Update");
       await updateProduct({ id: data.id, product: payload });
     } else {
-      // console.log("Create");
       await createProduct(payload);
       notify.showSuccess("Product added successfully!");
     }
   };
 
+  useEffect(() => {
+    if (createStatus.isSuccess) {
+      new Notification().showSuccess("Product successfully created!");
+    } else if (createStatus.isError) {
+      new Notification().showError("Product not created!");
+    }
+
+    if (updateStatus.isSuccess) {
+      new Notification().showSuccess("Product successfully updated!");
+    } else if (updateStatus.isError) {
+      new Notification().showError("Product not updated!");
+    }
+  }, [createStatus, updateStatus]);
+
   return {
     methods: {
       control,
       errors,
-      register,
     },
     onSubmit: handleSubmit(onSubmit),
   };

@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { categoryAPI } from "../../services/CategoryServices";
-import { CategoryType } from "../../models/CategoryType";
 
 function Categories() {
   const [expanded, setExpanded] = React.useState<string | false>(false);

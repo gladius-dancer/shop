@@ -7,6 +7,7 @@ import priceReduser from "./reducers/PriceSlice";
 import favoriteReduser from "./reducers/FavoriteSlice";
 import shippingReduser from "./reducers/ShippingSlice";
 import ordersReduser from "./reducers/OrdersSlice";
+import loadReduser from "./reducers/LoadSlice";
 import { productAPI } from "../services/ProductServices";
 import { categoryAPI } from "../services/CategoryServices";
 import { callbackAPI } from "../services/CallbackServices";
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   favoriteReduser,
   shippingReduser,
   ordersReduser,
+  loadReduser,
   [productAPI.reducerPath]: productAPI.reducer,
   [categoryAPI.reducerPath]: categoryAPI.reducer,
   [callbackAPI.reducerPath]: callbackAPI.reducer,

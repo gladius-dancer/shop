@@ -19,36 +19,34 @@ export default function useFeedback() {
     { id: "actions", label: "Actions", align: "left", minWidth: 80 },
   ];
 
-  const {
-    data: callbacks,
-    error,
-    status,
-  } = callbackAPI.useFetchAllCallbacksQuery("");
-  const [deleteCallback, { isSuccess }] =
+  const { data: callbacks } = callbackAPI.useFetchAllCallbacksQuery("");
+  const [deleteCallback, deleteStatus] =
     callbackAPI.useDeleteCallbackMutation();
 
   const [query, setQuery] = useState("");
 
+  const filteredCallbacks = callbacks?.filter((item) =>
+    item.full_name.toLowerCase().startsWith(query.toLowerCase())
+  );
+
   const handleSearch = (event) => {
     setQuery(event.target.value);
   };
-
   const handleDelete = async (id) => {
     await deleteCallback(id);
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (deleteStatus.isSuccess) {
       new Notification().showSuccess("Feedback successfully deleted!");
+    } else if (deleteStatus.isError) {
+      new Notification().showSuccess("Feedback not deleted!");
     }
-  });
+  }, [deleteStatus]);
 
   return {
     columns,
-    // createProduct,
-    // deleteProduct,
-    // updateProduct,
-    callbacks,
+    filteredCallbacks,
     handleSearch,
     handleDelete,
   };

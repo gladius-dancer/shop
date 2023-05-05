@@ -17,28 +17,23 @@ import QuickView from "../../components/QuickView/QuickView";
 import { ToastContainer } from "react-toastify";
 import { Notification } from "../../utils/notification";
 import { productAPI } from "../../services/ProductServices";
-import { change } from "../../store/reducers/ModalSlice";
+import { showModal, hideModal } from "../../store/reducers/ModalSlice";
 
-function Main() {
+export default function Main() {
   const dispatch = useAppDispatch();
   const nav = useAppSelector((state) => state.navReducer);
   const navigate = useNavigate();
   const isAuth = useIsAuthorized();
   const [currentProduct, setSetCurrentProduct] = useState<any>({});
   const cart = useAppSelector((state) => state.cartReduser.cart);
-  let notify = new Notification();
 
   const modal = useAppSelector((state) => state.modalReducer);
 
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = productAPI.useFetchAllProductsQuery("");
+  const { data: products, error } = productAPI.useFetchAllProductsQuery("");
 
   const addToCart = (id: number) => {
     if (isAuth) {
-      notify.showSuccess("Product added");
+      new Notification().showSuccess("Product added");
       const product = products?.filter((item: CartType) => item.id === id)[0];
       const founded = cart.find((item: any) => item.id === id);
       Boolean(founded)
@@ -58,15 +53,15 @@ function Main() {
             )
           )
         : dispatch(add({ ...product, count: 1, totalPrice: product.price }));
-      dispatch(() => change());
+      dispatch(hideModal());
     } else {
-      dispatch(() => change());
+      dispatch(hideModal());
       return navigate("/login");
     }
   };
 
   const showDetails = (id: number) => {
-    dispatch(change());
+    dispatch(showModal());
     const current: ProductType | undefined = products?.filter(
       (product: ProductType) => product.id === id
     )[0];
@@ -132,5 +127,3 @@ function Main() {
     </div>
   );
 }
-
-export default Main;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,13 +18,16 @@ import TextField from "@mui/material/TextField";
 import useProducts from "./hooks/useProducts";
 import { ProductModal } from "./modules/ProductModal";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
-import { change } from "../../store/reducers/ModalSlice";
+import { showModal, hideModal } from "../../store/reducers/ModalSlice";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import { Notification } from "../../utils/notification";
+import { productAPI } from "../../services/ProductServices";
+import { showLoader, hideLoader } from "../../store/reducers/LoadSlice";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -111,8 +114,17 @@ export default function Products() {
     useProducts();
 
   const dispatch = useAppDispatch();
-  const modal = useAppSelector((state) => state.modalReducer);
+  const fetchProducts = productAPI.endpoints.fetchAllProducts.useQuery("");
 
+  if (fetchProducts.isLoading) {
+    dispatch(showLoader());
+  } else if (fetchProducts.isError) {
+    new Notification().showError("Load error!");
+  } else if (fetchProducts.isSuccess) {
+    dispatch(hideLoader());
+  }
+
+  const modal = useAppSelector((state) => state.modalReducer);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -140,12 +152,12 @@ export default function Products() {
   };
 
   function openCreateModal(item) {
-    dispatch(change());
+    dispatch(showModal());
     setSelectedProduct({ data: {} });
   }
 
   function openUpdateModal(item) {
-    dispatch(change());
+    dispatch(showModal());
     setSelectedProduct({ data: item });
   }
 

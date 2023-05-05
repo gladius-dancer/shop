@@ -3,10 +3,8 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import * as yup from "yup";
 import { Notification } from "../../../utils/notification";
 import { userAPI } from "../../../services/UserServices";
-import { UserSendType } from "../../../models/UserType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-let notify = new Notification();
 const schema = yup.object().shape({
   username: yup.string().required(),
   first_name: yup.string().required(),
@@ -15,13 +13,12 @@ const schema = yup.object().shape({
 });
 
 export function useUserUpdateModal(data) {
-  const [updateUser, {}] = userAPI.useUpdateUserMutation();
+  const [updateUser, updateStatus] = userAPI.useUpdateUserMutation();
   const [isAdmin, setIsAdmin] = useState(false);
 
   const {
     handleSubmit,
     control,
-    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -32,7 +29,7 @@ export function useUserUpdateModal(data) {
       username: data.username,
     },
   });
-  const onSubmit = async (formData) => {
+  const onSubmit = (formData) => {
     let payload = {
       user: {
         username: formData.username,
@@ -43,15 +40,21 @@ export function useUserUpdateModal(data) {
         user_image: formData.user_image,
       },
     };
-
-    await updateUser({ id: data.id, user: payload });
+    updateUser({ id: data.id, user: payload });
   };
+
+  useEffect(() => {
+    if (updateStatus.isSuccess) {
+      new Notification().showSuccess("User successfully updated!");
+    } else if (updateStatus.isError) {
+      new Notification().showSuccess("User not updated!");
+    }
+  }, [updateStatus]);
 
   return {
     methods: {
       control,
       errors,
-      register,
     },
     onSubmit: handleSubmit(onSubmit),
     setIsAdmin: () => setIsAdmin(!isAdmin),

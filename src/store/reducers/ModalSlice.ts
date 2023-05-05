@@ -6,11 +6,15 @@ export const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    change(state) {
-      return !state;
+    showModal(state) {
+      return (state = true);
+    },
+    hideModal(state) {
+      return (state = false);
     },
   },
 });
 
 export default modalSlice.reducer;
-export const { change } = modalSlice.actions;
+export const { showModal } = modalSlice.actions;
+export const { hideModal } = modalSlice.actions;

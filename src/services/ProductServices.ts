@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { ProductType } from "../models/ProductType";
 import { ProductSendType } from "../models/ProductSendType";
+import { Notification } from "../utils/notification";
 
 export const productAPI = createApi({
   reducerPath: "productAPI",

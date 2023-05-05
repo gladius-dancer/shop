@@ -1,7 +1,6 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { userAPI } from "../../../services/UserServices";
-import { useState } from "react";
-import { countryAPI } from "../../../services/CountryServices";
+import { Notification } from "../../../utils/notification";
 
 export default function useUsers() {
   interface Column {
@@ -49,9 +48,8 @@ export default function useUsers() {
     },
   ];
 
-  const { data: users, error, status } = userAPI.useFetchAllUsersQuery("");
-  const [deleteUser, {}] = userAPI.useDeleteUserMutation();
-
+  const { data: users } = userAPI.useFetchAllUsersQuery("");
+  const [deleteUser, deleteStatus] = userAPI.useDeleteUserMutation();
   const [query, setQuery] = useState("");
 
   const filteredUsers = users?.filter((item) =>
@@ -66,11 +64,16 @@ export default function useUsers() {
     await deleteUser(id);
   };
 
+  useEffect(() => {
+    if (deleteStatus.isSuccess) {
+      new Notification().showSuccess("User successfully deleted!");
+    } else if (deleteStatus.isError) {
+      new Notification().showError("User not deleted!");
+    }
+  }, [deleteStatus]);
+
   return {
     columns,
-    // createProduct,
-    // deleteProduct,
-    // updateProduct,
     filteredUsers,
     handleSearch,
     handleDelete,

@@ -3,8 +3,6 @@ import images from "../../assets";
 import "./Footer.scss";
 import { InputText } from "../FormComponents/InputText";
 import { MultiLine } from "../FormComponents/MultiLine";
-import dayjs from "dayjs";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useCallbackForm } from "./hook/useCallbackForm";
