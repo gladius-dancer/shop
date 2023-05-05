@@ -9,7 +9,7 @@ import TextDecreaseIcon from "@mui/icons-material/TextDecrease";
 
 export function AddAttributeModal() {
   const {
-    methods: { control, errors },
+    methods: { control, errors, register },
     onSubmit,
   } = useAddAttributeModal();
 
@@ -30,10 +30,8 @@ export function AddAttributeModal() {
           />
           {fields.map((field, index) => (
             <div key={field.id} className="d-flex ">
-              <InputText
-                status={true}
-                name={`variant${index + 1}`}
-                control={control}
+              <TextField
+                {...register(`variants.${index}.name`)}
                 label={`Variant ${index + 1}`}
               />
               <Button onClick={() => remove(index)}>
@@ -41,9 +39,7 @@ export function AddAttributeModal() {
               </Button>
             </div>
           ))}
-          <Button onClick={() => append({ name: `item${fields.length + 1}` })}>
-            Add Item
-          </Button>
+          <Button onClick={() => append({ name: `` })}>Add Item</Button>
 
           <Button type="submit" variant="contained">
             Save

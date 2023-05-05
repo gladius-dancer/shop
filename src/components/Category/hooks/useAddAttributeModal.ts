@@ -13,6 +13,7 @@ export function useAddAttributeModal(data) {
   const {
     control,
     handleSubmit,
+    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -41,6 +42,7 @@ export function useAddAttributeModal(data) {
     methods: {
       control,
       errors,
+      register,
     },
     onSubmit: handleSubmit(onSubmit),
   };
