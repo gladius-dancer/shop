@@ -6,13 +6,14 @@ import cartReduser from "./reducers/CartSlice";
 import priceReduser from "./reducers/PriceSlice";
 import favoriteReduser from "./reducers/FavoriteSlice";
 import shippingReduser from "./reducers/ShippingSlice";
-import ordersReduser from "./reducers/OrdersSlice";
 import loadReduser from "./reducers/LoadSlice";
 import { productAPI } from "../services/ProductServices";
 import { categoryAPI } from "../services/CategoryServices";
 import { callbackAPI } from "../services/CallbackServices";
 import { userAPI } from "../services/UserServices";
 import { countryAPI } from "../services/CountryServices";
+import { attributeAPI } from "../services/AttributeServices";
+import { orderAPI } from "../services/OrderServices";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -22,13 +23,14 @@ const rootReducer = combineReducers({
   priceReduser,
   favoriteReduser,
   shippingReduser,
-  ordersReduser,
   loadReduser,
   [productAPI.reducerPath]: productAPI.reducer,
   [categoryAPI.reducerPath]: categoryAPI.reducer,
   [callbackAPI.reducerPath]: callbackAPI.reducer,
   [userAPI.reducerPath]: userAPI.reducer,
   [countryAPI.reducerPath]: countryAPI.reducer,
+  [attributeAPI.reducerPath]: attributeAPI.reducer,
+  [orderAPI.reducerPath]: orderAPI.reducer,
 });
 
 export const setupStore = () => {
@@ -40,7 +42,9 @@ export const setupStore = () => {
         .concat(categoryAPI.middleware)
         .concat(callbackAPI.middleware)
         .concat(userAPI.middleware)
-        .concat(countryAPI.middleware),
+        .concat(countryAPI.middleware)
+        .concat(attributeAPI.middleware)
+        .concat(orderAPI.middleware),
   });
 };
 

@@ -6,7 +6,6 @@ import { userAPI } from "../../../services/UserServices";
 import { UserSendType } from "../../../models/UserType";
 import { useEffect, useState } from "react";
 
-let notify = new Notification();
 const schema = yup.object().shape({
   username: yup.string().required(),
   password: yup.string().required().min(4),

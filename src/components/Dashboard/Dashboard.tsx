@@ -18,6 +18,10 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import { TableFooter } from "@mui/material";
+import { hideLoader, showLoader } from "../../store/reducers/LoadSlice";
+import { Notification } from "../../utils/notification";
+import { useAppDispatch } from "../../hooks/useRedux";
+import { userAPI } from "../../services/UserServices";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -101,11 +105,9 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 export default function Dashboard() {
   const { columns } = useDashboard();
-  const {
-    data: products,
-    isLoading,
-    error,
-  } = productAPI.useFetchAllProductsQuery("");
+  const dispatch = useAppDispatch();
+
+  const products = productAPI.endpoints.fetchAllProducts.useQuery("");
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -127,6 +129,14 @@ export default function Dashboard() {
     setPage(0);
   };
 
+  if (products.isLoading) {
+    dispatch(showLoader());
+  } else if (products.isError) {
+    new Notification().showError("Load error!");
+  } else if (products.isSuccess) {
+    dispatch(hideLoader());
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
@@ -145,7 +155,7 @@ export default function Dashboard() {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? products?.slice(
+            ? products.data?.slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
               )

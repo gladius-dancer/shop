@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { AttributeType } from "../models/AttributeType";
 
-export const categoryAPI = createApi({
+export const attributeAPI = createApi({
   reducerPath: "attributeAPI",
   baseQuery: fetchBaseQuery({ baseUrl: "https://ecommerce.icedev.uz" }),
   tagTypes: ["Attributes"],
   endpoints: (build) => ({
-    fetchAllAttributes: build.query<AttributeType[], string>({
-      query: () => ({
-        url: "/categories/{category_id}/attributes",
+    fetchCategoryAttributes: build.query<any, string>({
+      query: (id) => ({
+        url: `/categories/${id}/attributes`,
       }),
       providesTags: (result) => ["Attributes"],
     }),

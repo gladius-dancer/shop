@@ -9,7 +9,7 @@ const schema = yup.object().shape({
   attribute_name: yup.string().required(),
 });
 
-export function useAddAttributeModal(data) {
+export function useChangeAttributeModal(data) {
   const {
     control,
     handleSubmit,

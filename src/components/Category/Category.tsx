@@ -23,6 +23,7 @@ import { CategoryModal } from "./modules/CategoryModal";
 import EditAttributesIcon from "@mui/icons-material/EditAttributes";
 import TextIncreaseIcon from "@mui/icons-material/TextIncrease";
 import { AddAttributeModal } from "./modules/AddAttributeModal";
+import ChangeAttributeModal from "./modules/ChangeAttributeModal";
 
 export default function Category() {
   const [page, setPage] = useState(0);
@@ -31,8 +32,11 @@ export default function Category() {
   }>({
     data: null,
   });
-  const [attributeModal, setAttributeModal] = useState(false);
-  const [changeAttributeModal, setChangeAttributeModal] = useState(false);
+  const [modals, setModals] = useState({
+    create: false,
+    add: false,
+    change: false,
+  });
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const dispatch = useAppDispatch();
   const modal = useAppSelector((state) => state.modalReducer);
@@ -60,27 +64,34 @@ export default function Category() {
     setPage(0);
   };
 
-  function openUserModal(item) {
+  function openCreateModal(item) {
     dispatch(showModal());
     setSelectedCategory({ data: {} });
-    setAttributeModal(false);
+    setModals({ create: true, add: false, change: false });
   }
 
   function openUpdateModal(item) {
     dispatch(showModal());
     setSelectedCategory({ data: item });
-    setAttributeModal(false);
+    setModals({ create: true, add: false, change: false });
   }
 
   function openAddAttribute(item) {
     dispatch(showModal());
-    setAttributeModal(true);
+    setSelectedCategory({ data: item });
+    setModals({ create: false, add: true, change: false });
+  }
+
+  function openChangeAttribute(item) {
+    dispatch(showModal());
+    setSelectedCategory({ data: item });
+    setModals({ create: false, add: false, change: true });
   }
 
   return (
     <>
       <div className="products-top">
-        <Button onClick={() => openUserModal({})} variant="contained">
+        <Button onClick={() => openCreateModal({})} variant="contained">
           Add category
         </Button>
         <div className="product-search">
@@ -111,7 +122,7 @@ export default function Category() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.parent_category.name}</TableCell>
                   <TableCell className="actions">
-                    <IconButton onClick={() => openUpdateModal(item)}>
+                    <IconButton onClick={() => openChangeAttribute(item)}>
                       <EditAttributesIcon color="primary" />
                     </IconButton>
                     <IconButton onClick={() => openAddAttribute(item.id)}>
@@ -140,13 +151,18 @@ export default function Category() {
         />
       </Paper>
 
-      {modal && !attributeModal && (
+      {modal && modals.create && (
         <CategoryModal
           categories={fetchCategory}
           data={selectedCategory.data}
         />
       )}
-      {modal && attributeModal && <AddAttributeModal />}
+      {modal && modals.add && (
+        <AddAttributeModal data={selectedCategory.data} />
+      )}
+      {modal && modals.change && (
+        <ChangeAttributeModal data={selectedCategory.data} />
+      )}
     </>
   );
 }

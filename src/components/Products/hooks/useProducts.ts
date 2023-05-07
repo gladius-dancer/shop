@@ -1,4 +1,3 @@
-import * as React from "react";
 import { productAPI } from "../../../services/ProductServices";
 import { categoryAPI } from "../../../services/CategoryServices";
 import { useEffect, useState } from "react";

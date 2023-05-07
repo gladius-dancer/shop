@@ -7,11 +7,11 @@ import { useFieldArray, useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import TextDecreaseIcon from "@mui/icons-material/TextDecrease";
 
-export function AddAttributeModal() {
+export function AddAttributeModal({ data }) {
   const {
     methods: { control, errors, register },
     onSubmit,
-  } = useAddAttributeModal();
+  } = useAddAttributeModal(data);
 
   const { fields, append, remove } = useFieldArray({
     control,

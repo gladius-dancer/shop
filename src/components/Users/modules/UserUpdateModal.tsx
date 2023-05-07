@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { InputText } from "../../FormComponents/InputText";
-import { Dropdown } from "../../FormComponents/Dropdown";
 import { InputCheckbox } from "../../FormComponents/Checkbox";
-import { Button, FormHelperText } from "@mui/material";
+import { Button } from "@mui/material";
 import ModalComponent from "../../Modal/ModalComponent";
-import { useUserModal } from "../hooks/useUserModal";
 import "../Users.scss";
 import { useUserUpdateModal } from "../hooks/useUserUpdateModal";
 

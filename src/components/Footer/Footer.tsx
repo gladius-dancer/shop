@@ -19,7 +19,6 @@ function Footer() {
     <footer className="footer_area">
       <div className="container">
         <div className="row">
-          {/* Single Footer Area Start */}
           <div className="col-12 col-md-6 col-lg-3">
             <div className="single_footer_area">
               <div className="footer-logo">
@@ -134,7 +133,6 @@ function Footer() {
         </div>
         <div className="line"></div>
 
-        {/* Footer Bottom Area Start */}
         <div className="footer_bottom_area">
           <div className="row">
             <div className="col-12">

@@ -18,6 +18,7 @@ import { ToastContainer } from "react-toastify";
 import { Notification } from "../../utils/notification";
 import { productAPI } from "../../services/ProductServices";
 import { showModal, hideModal } from "../../store/reducers/ModalSlice";
+import { hideLoader, showLoader } from "../../store/reducers/LoadSlice";
 
 export default function Main() {
   const dispatch = useAppDispatch();
@@ -29,12 +30,22 @@ export default function Main() {
 
   const modal = useAppSelector((state) => state.modalReducer);
 
-  const { data: products, error } = productAPI.useFetchAllProductsQuery("");
+  const products = productAPI.useFetchAllProductsQuery("");
+
+  if (products.isLoading) {
+    dispatch(showLoader());
+  } else if (products.isError) {
+    new Notification().showError("Load error!");
+  } else if (products.isSuccess) {
+    dispatch(hideLoader());
+  }
 
   const addToCart = (id: number) => {
     if (isAuth) {
       new Notification().showSuccess("Product added");
-      const product = products?.filter((item: CartType) => item.id === id)[0];
+      const product = products.data?.filter(
+        (item: CartType) => item.id === id
+      )[0];
       const founded = cart.find((item: any) => item.id === id);
       Boolean(founded)
         ? dispatch(
@@ -62,7 +73,7 @@ export default function Main() {
 
   const showDetails = (id: number) => {
     dispatch(showModal());
-    const current: ProductType | undefined = products?.filter(
+    const current: ProductType | undefined = products.data?.filter(
       (product: ProductType) => product.id === id
     )[0];
     setSetCurrentProduct(current);
@@ -99,7 +110,7 @@ export default function Main() {
           </div>
         </div>
         <ProductList
-          products={products}
+          products={products.data}
           showDetails={showDetails}
           addToCart={addToCart}
           currentPage={1}

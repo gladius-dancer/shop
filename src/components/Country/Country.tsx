@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
-import { showModal, hideModal } from "../../store/reducers/ModalSlice";
+import { showModal } from "../../store/reducers/ModalSlice";
 import useCountry from "./hooks/useCountry";
 import { CountryModal } from "./modules/CountryModal";
 import { countryAPI } from "../../services/CountryServices";

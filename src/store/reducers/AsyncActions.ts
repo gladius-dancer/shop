@@ -27,7 +27,6 @@ export const login = (data: LoginType) => async (dispatch: AppDispatch) => {
       }
     );
     localStorage.setItem("token", JSON.stringify(response.data));
-    localStorage.setItem("authStatus", JSON.stringify("true"));
     dispatch(authSlice.actions.loginSuccess(true));
   } catch (e: any) {
     dispatch(authSlice.actions.loginError(e.message));

@@ -8,13 +8,14 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { change } from "../../store/reducers/NavSlice";
 import { useIsAuthorized } from "../../hooks/useIsAuthorized";
 import { Notification } from "../../utils/notification";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const notify = new Notification();
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("authStatus");
+    localStorage.setItem("authStatus", "false");
     notify.showInfo("User succesfully logout!");
   };
   const cart = useAppSelector((state) => state.cartReduser.cart);
@@ -35,24 +36,26 @@ export default function Header() {
                 </div>
 
                 <div className="header-cart-menu card-menu">
-                  <div className="cart">
-                    <Link to={"/cart"} id="header-cart-btn">
-                      <span className="cart_quantity"></span>
-                      <i className="ti-heart"></i>{" "}
-                      <label className="favorite">Favorites</label>
-                    </Link>
-                  </div>
-                  <div className="cart">
-                    <Link to={"/cart"} id="header-cart-btn">
-                      {cart.length > 0 ? (
-                        <span className="cart_quantity">{cart.length}</span>
-                      ) : (
-                        <></>
-                      )}
-                      <i className="ti-bag"></i>{" "}
-                      <label className="bag">Your Bag</label>
-                    </Link>
-                  </div>
+                  {/*<div className="cart">*/}
+                  {/*  <Link to={"/cart"} id="header-cart-btn">*/}
+                  {/*    <span className="cart_quantity"></span>*/}
+                  {/*    <i className="ti-heart"></i>{" "}*/}
+                  {/*    <label className="favorite">Favorites</label>*/}
+                  {/*  </Link>*/}
+                  {/*</div>*/}
+                  {isAutorized && (
+                    <div className="cart">
+                      <Link to={"/cart"} id="header-cart-btn">
+                        {cart.length > 0 ? (
+                          <span className="cart_quantity">{cart.length}</span>
+                        ) : (
+                          <></>
+                        )}
+                        <i className="ti-bag"></i>{" "}
+                        <label className="bag">Your Bag</label>
+                      </Link>
+                    </div>
+                  )}
 
                   <div className="help-line">
                     {isAutorized ? (
@@ -116,7 +119,10 @@ export default function Header() {
                   >
                     <ul className="navbar-nav animated" id="nav">
                       <li className="nav-item active">
-                        <a className="nav-link" href="src/components/Header/Header">
+                        <a
+                          className="nav-link"
+                          href="src/components/Header/Header"
+                        >
                           Home
                         </a>
                       </li>
@@ -136,7 +142,10 @@ export default function Header() {
                           className="dropdown-menu"
                           aria-labelledby="karlDropdown"
                         >
-                          <a className="dropdown-item" href="src/components/Header/Header">
+                          <a
+                            className="dropdown-item"
+                            href="src/components/Header/Header"
+                          >
                             Home
                           </a>
                           <a className="dropdown-item" href="shop.html">
@@ -151,7 +160,10 @@ export default function Header() {
                         </div>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link" href="src/components/Header/Header">
+                        <a
+                          className="nav-link"
+                          href="src/components/Header/Header"
+                        >
                           Contact
                         </a>
                       </li>
