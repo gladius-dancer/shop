@@ -28,7 +28,6 @@ export const orderAPI = createApi({
     deleteOrder: build.mutation<any, any>({
       query: (data) => {
         const { user_id, order_id } = data;
-        console.log(data);
         return {
           url: `/orders/${user_id}/${order_id}`,
           method: "DELETE",

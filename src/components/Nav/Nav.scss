@@ -1,0 +1,17 @@
+.admin-profile:hover{
+  .admin-popup{
+    display: block;
+  }
+}
+
+.admin-popup{
+  position: absolute;
+  right: 20px;
+  top: 55px;
+  display: none;
+
+  p{
+    cursor: pointer;
+    margin-top: 15px;
+  }
+}

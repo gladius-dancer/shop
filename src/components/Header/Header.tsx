@@ -2,24 +2,23 @@ import * as React from "react";
 import images from "../../assets";
 import { Link } from "react-router-dom";
 import "./Header.scss";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/scss/main.scss";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { change } from "../../store/reducers/NavSlice";
 import { useIsAuthorized } from "../../hooks/useIsAuthorized";
 import { Notification } from "../../utils/notification";
-import { useEffect, useState } from "react";
 
 export default function Header() {
   const dispatch = useAppDispatch();
-  const notify = new Notification();
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.setItem("authStatus", "false");
-    notify.showInfo("User succesfully logout!");
+    new Notification().showInfo("User succesfully logout!");
   };
   const cart = useAppSelector((state) => state.cartReduser.cart);
-  const isAutorized = useIsAuthorized();
+
+  let isAuth = useIsAuthorized();
 
   return (
     <header className="header_area">
@@ -43,7 +42,7 @@ export default function Header() {
                   {/*    <label className="favorite">Favorites</label>*/}
                   {/*  </Link>*/}
                   {/*</div>*/}
-                  {isAutorized && (
+                  {isAuth && (
                     <div className="cart">
                       <Link to={"/cart"} id="header-cart-btn">
                         {cart.length > 0 ? (
@@ -58,7 +57,7 @@ export default function Header() {
                   )}
 
                   <div className="help-line">
-                    {isAutorized ? (
+                    {isAuth ? (
                       <>
                         <Link to={"/profile"}>
                           <div

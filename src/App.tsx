@@ -23,7 +23,6 @@ Modal.setAppElement("#root");
 const App = () => {
   const loading = useAppSelector((state) => state.loadReduser);
   const isAuth = useIsAuthorized();
-  console.log(isAuth);
 
   return (
     <>
